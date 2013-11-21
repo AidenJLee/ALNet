@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>url</key>
+	<string></string>
+	<key>url2</key>
+	<string></string>
+	<key>httpMethod</key>
+	<string>GET</string>
+	<key>type</key>
+	<string>JSON</string>
+	<key>task</key>
+	<string>DATA</string>
+	<key>bodyData</key>
+	<data></data>
+	<key>fileURL</key>
+	<string></string>
+	<key>param</key>
+	<dict/>
+	<key>customParam</key>
+	<dict/>
+</dict>
+</plist>

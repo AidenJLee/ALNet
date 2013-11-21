@@ -92,9 +92,11 @@ static ALNetManager *__instance = nil;
     
     
     [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
-                                                            object:responseObject
-                                                          userInfo:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
+                                                                object:responseObject
+                                                              userInfo:nil];
+        });
     }];
 //    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
 //        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]

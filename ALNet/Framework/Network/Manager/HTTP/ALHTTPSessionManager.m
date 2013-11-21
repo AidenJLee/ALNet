@@ -43,7 +43,13 @@
             
         }
         if (completionHandler) {
-            self.requestInfo[@"value"] = [self.serialization objectForResponse:response data:data];
+            id value = [self.serialization objectForResponse:response data:data];
+            if (value) {
+                self.requestInfo[@"value"] = value;
+            } else {
+                self.requestInfo[@"value"] = @{};
+            }
+            
             completionHandler(task, self.requestInfo);
         }
     }];
@@ -60,7 +66,12 @@
             
         }
         if (completionHandler) {
-            self.requestInfo[@"value"] = [self.serialization objectForResponse:response data:data];
+            id value = [self.serialization objectForResponse:response data:data];
+            if (value) {
+                self.requestInfo[@"value"] = value;
+            } else {
+                self.requestInfo[@"value"] = @{};
+            }
             completionHandler(task, self.requestInfo);
         }
     }];

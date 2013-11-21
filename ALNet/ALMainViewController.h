@@ -14,4 +14,6 @@
     ALTransaction *_alt;
 }
 
+@property (strong, nonatomic) IBOutlet UITextView *textView;
+
 @end

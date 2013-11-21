@@ -86,7 +86,12 @@
 
 - (void)recieveSuccess:(id)result
 {
-    NSLog(@"recieveSuccess : %@", result);
+    NSDictionary *value = result;
+    NSLog(@"recieveSuccess : %@", [NSString stringWithFormat:@"%@", value]);
+    [_textView setText:[NSString stringWithFormat:@"%@", value]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
 }
 
 - (void)recieveFailure:(id)result

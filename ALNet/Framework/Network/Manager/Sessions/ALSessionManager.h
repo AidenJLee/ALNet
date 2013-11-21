@@ -7,35 +7,51 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ALNetConst.h"
 
-
-typedef void (^ALProgressBlock)(double totalBytesWritten, double bytesExpected);
-typedef void (^ALCompletionBlock)(NSURL *imageUrl, BOOL success);
-
-@interface ALSessionManager : NSObject <NSURLSessionDelegate, NSURLSessionTaskDelegate>
+@interface ALSessionManager : NSObject <NSURLSessionDelegate>
+{
+    __weak id _target;
+    SEL _selector;
+}
 
 
 #pragma mark -
 #pragma mark - ALSessionManager
-@property (readonly, strong, nonatomic) NSURLSession *session;
+@property (nonatomic, strong) id requestInfo;   // 송신, 수신에 대한 정보
+@property (nonatomic, strong, readonly) NSURLSession *session;
+
+// ALSessionManager + TaskDelegate
+@property (copy, nonatomic) NSURL *downloadedFileURL;
+//@property (strong, nonatomic) NSMutableData *mutableData;
+@property (strong, nonatomic) NSProgress *uploadProgress;
+@property (strong, nonatomic) NSProgress *downloadProgress;
+
 
 // Init
-- (instancetype)initWithConfig:(NSURLSessionConfiguration *)configuration;
+- (id)initWithConfig:(NSURLSessionConfiguration *)configuration
+              Target:(id)target
+            selector:(SEL)selector
+         requestInfo:(NSDictionary *)requestInfo;
 
 // Public Method
 - (void)invalidateSessionCancel;
 - (void)invalidateAndFinishTasksCancel;
 
-- (NSArray *)getTasksWithTaskType:(NSString *)taskType;
+// Upload Task
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+                                         fromFile:(NSURL *)fileURL
+                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+                                         fromData:(NSData *)bodyData
+                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-#pragma mark -
-#pragma mark - ALSessionManager + TaskDelegate
-@property (strong, nonatomic) NSMutableData *mutableData;
-@property (strong, nonatomic) NSProgress *uploadProgress;
-@property (strong, nonatomic) NSProgress *downloadProgress;
-@property (copy, nonatomic) NSURL *downloadedFileURL;
+// Download Task
+- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
+                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
+- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
+                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
+
 
 
 @end

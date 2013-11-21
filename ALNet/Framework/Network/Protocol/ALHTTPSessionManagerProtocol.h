@@ -11,9 +11,9 @@
 @protocol ALHTTPSessionManagerProtocol <NSObject>
 
 @required
-- (id)initWithConfig:(NSURLSessionConfiguration *)configuration
-              Target:(id)target
-            selector:(SEL)selector
-         requestInfo:(NSDictionary *)requestInfo;
+- (instancetype)initWithConfig:(NSURLSessionConfiguration *)configuration
+                        Target:(id)target
+                      selector:(SEL)selector
+                   requestInfo:(NSDictionary *)requestInfo;
 
 @end

@@ -64,17 +64,23 @@ static ALNetManager *__instance = nil;
 - (void)requestWithRequestInfo:(id)requestInfo
 {
     
-    NSString *srtURL = requestInfo[@"url"];
+    NSString *strURL = requestInfo[@"url2"];
     
-    if (!srtURL) {
+    if (strURL == nil || [strURL isEqualToString:@""]) {
+        strURL = requestInfo[@"url"];
+    }
+    
+    if (strURL == nil || [strURL isEqualToString:@""]) {
         return;
     }
     
+    strURL = [strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    // Configuration Custom 가능 - 미채ㅜ랴혁ㅁ샤ㅐㅜ.ㅗ
+    // Configuration Custom 가능 - ALConfiguration.h에서
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
     if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
         config = nil;
     }
@@ -83,21 +89,66 @@ static ALNetManager *__instance = nil;
                                                                                  Target:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
                                                                             requestInfo:requestInfo];
-    [sessionManager getTasksWithTaskType:@""];
+    
+    
+    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
+                                                            object:responseObject
+                                                          userInfo:nil];
+    }];
+//    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
+//                                                            object:responseObject
+//                                                          userInfo:nil];
+//    }];
+    
+    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OPERATION_QUEUE_STATUS options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    
+    
+    
+//    NSString *httpMethod = requestInfo[@"httpMethod"];
+//    
+//    if ([httpMethod isEqualToString:@"GET"]) {
+//        [sessionManager GET:[NSURL URLWithString:strURL] parameters:requestInfo[@"param"]];
+//    } else if ([httpMethod isEqualToString:@"POST"]) {
+//        
+//    } else if ([httpMethod isEqualToString:@"PUT"]) {
+//        
+//    } else if ([httpMethod isEqualToString:@"DELETE"]) {
+//        
+//    } else {
+//        
+//    }
     
 }
 
+
+#pragma mark -
+#pragma mark - NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    
+    if([keyPath isEqualToString:OPERATION_QUEUE_STATUS]) {
+        NSLog(@"checking for operation Count : %d", [(NSOperationQueue *)object operationCount]);
+        if ([(NSOperationQueue *)object operationCount] <= 0) {
+            // 상단 네트워크 인디케이터 끔
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            // KVO 지움
+            [(NSOperationQueue *)object removeObserver:self forKeyPath:@"operationCount" context:nil];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
 
 #pragma mark -
 #pragma mark Connection Callback
 
 - (void)didFinishConnectionWithResult:(id)result
 {
-    
-    //    if (sessionManager.session.delegateQueue.operationCount <= 1) {
-    //        // 상단 네트워크 인디케이터 끔
-    //        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    //    }
     
     if ([result[@"type"] isEqualToString:@"image"]) {
         

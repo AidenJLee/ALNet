@@ -30,7 +30,7 @@
 #pragma mark -
 #pragma mark Public Method
 - (void)sendRequestForUserInfo:(id)userInfo;
-- (void)didFinishReceive:(NSNotification *)finishNoti; // Callback By Network Manager
+- (void)didFinishReceive:(NSNotification *)finishNoti; // Callback By ALNetManager
 
 #pragma mark -
 #pragma mark Public Method (for Framework)

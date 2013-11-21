@@ -18,32 +18,36 @@ static void *ContextTaskState = &ContextTaskState;
 
 @interface ALSessionManager ()
 
-@property (readwrite, strong, nonatomic) NSURLSession *session;
+@property (nonatomic, strong, readwrite) NSURLSession *session;
 
 @end
 
-
-#define MAX_OPERATIONQUEUE_COUNT 5
-#define SESSION_DOWNLOAD_ID (@"com.entist.download.session")
 
 @implementation ALSessionManager
 
 
 #pragma mark -
 #pragma mark Initialization
-- (instancetype)initWithConfig:(NSURLSessionConfiguration *)configuration
+- (id)initWithConfig:(NSURLSessionConfiguration *)configuration
+              Target:(id)target
+            selector:(SEL)selector
+         requestInfo:(NSDictionary *)requestInfo
 {
     
     self = [super init];
     if (self) {
+        
         if (configuration) {
             _session = [self createSessionWithConfig:configuration];
         } else {
             _session = [self backgroundSession];
         }
-        
-    }
-    return self;
+		_target      = target;
+		_selector    = selector;
+        _requestInfo = requestInfo;
+
+	}
+	return self;
     
 }
 
@@ -61,7 +65,7 @@ static void *ContextTaskState = &ContextTaskState;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             _sharedQueue = [[NSOperationQueue alloc] init];
-            _sharedQueue.name = @"com.entist.ALNet.operationQueue";
+            _sharedQueue.name = OPERATION_QUEUE_NAME;
             _sharedQueue.maxConcurrentOperationCount = MAX_OPERATIONQUEUE_COUNT;
         });
         
@@ -97,6 +101,7 @@ static void *ContextTaskState = &ContextTaskState;
 		_backgroundSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[self.class operationQueue]];
 	});
 	return _backgroundSession;
+    
 }
 
 
@@ -209,6 +214,12 @@ static void *ContextTaskState = &ContextTaskState;
 
 #pragma mark -
 #pragma mark - DataTask Method Implement
+- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url
+                        completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+{
+    return [self addObserverWithTask:[self.session dataTaskWithURL:url completionHandler:completionHandler]];
+}
+
 - (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
                             completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
 {

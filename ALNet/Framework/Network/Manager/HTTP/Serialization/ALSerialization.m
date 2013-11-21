@@ -22,27 +22,19 @@
 }
 
 #pragma mark -
+#pragma makr - object Serialization
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
-    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-    if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
-        ![self.contentTypes containsObject:[res MIMEType]]) {
-        if ([data length] > 0) {
-            return nil;
-        }
-    }
-
-    // NSJSONSerialization Issue : https://github.com/rails/rails/issues/1742
-    NSStringEncoding stringEncoding = NSUTF8StringEncoding;
-    if (response.textEncodingName) {
-        CFStringEncoding encoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)response.textEncodingName);
-        if (encoding != kCFStringEncodingInvalidId) {
-            stringEncoding = CFStringConvertEncodingToNSStringEncoding(encoding);
-        }
-    }
+//    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+//    if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
+//        ![self.contentTypes containsObject:[res MIMEType]]) {
+//        if ([data length] > 0) {
+//            return nil;
+//        }
+//    }
     
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:stringEncoding];
+    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     if (responseString && ![responseString isEqualToString:@" "]) {
         // Workaround for a bug in NSJSONSerialization when Unicode character escape codes are used instead of the actual character
         // See http://stackoverflow.com/a/12843465/157142
@@ -61,7 +53,151 @@
     return nil;
 }
 
-/* SBJson Lib를 사용하고 싶다면?
+
+#pragma mark -
+#pragma mark - Request Serialization
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                 URLString:(NSString *)URLString
+                                parameters:(NSDictionary *)parameters
+{
+    NSParameterAssert(method);
+    NSParameterAssert(URLString);
+    NSParameterAssert(parameters);
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    // 파라메터 수집
+    NSMutableString *strParam = [[NSMutableString alloc] init];
+    
+    for (NSString *key in [parameters allKeys]) {
+        
+        if (strParam.length != 0) {
+            [strParam appendFormat:@"&%@=%@", key, parameters[key]];
+        } else {
+            [strParam appendFormat:@"%@=%@",  key, parameters[key]];
+        }
+        
+    }
+    
+    if ([method isEqualToString:@"GET"]) {
+        
+        
+        // 앞에 ?를 붙여준다.
+        if ([strParam length] != 0) {
+            [strParam insertString:@"?" atIndex:0];
+        }
+        
+        NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
+        [request setTimeoutInterval:30.0];                              // 30초 타임아웃
+        [request setHTTPMethod:method];
+        [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", URLString, strEncodeParam]]];
+        
+//        NSMutableDictionary *mutableHTTPRequestHeaders = requestInfo[@"httpHeaderField"];
+//        
+//        [mutableHTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
+//            if (![request valueForHTTPHeaderField:field]) {
+//                [request setValue:value forHTTPHeaderField:field];
+//            }
+//        }];
+        
+    } else if ([method isEqualToString:@"POST"]) {
+        
+        [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
+        [request setTimeoutInterval:30.0];                              // 30초 타임아웃
+        [request setHTTPMethod:method];
+        [request setURL:[NSURL URLWithString:URLString]];
+        
+//        NSMutableData *data = [[NSMutableData alloc] init];
+//        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+//        [archiver encodeObject:parameters forKey:@"parameters"];
+//        [archiver finishEncoding];
+        
+        NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
+        [request setHTTPBody:dataParam];
+        
+    } else if ([method isEqualToString:@"PUT"]) {
+        
+        NSMutableData * body = [NSMutableData data];
+        NSString *boundary = @"0xKhTmLbOuNdArY";
+        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+        [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
+        
+        for (NSString *key in [parameters allKeys]) {
+            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary]dataUsingEncoding:NSUTF8StringEncoding]];
+            if ([[parameters[key] class] isSubclassOfClass:[NSString class]]) {
+                [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameters[key]] dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            else if([[parameters[key] class] isSubclassOfClass:[UIImage class]])
+            {
+                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:
+                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@.jpg\"\r\n", key, key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:UIImageJPEGRepresentation(parameters[key], 1.0)];
+                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            else if([[parameters[key] class] isSubclassOfClass:[NSData class]])
+            {
+                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:
+                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; \r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:parameters[key]];
+                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            
+        }
+        [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [request setHTTPBody:body];
+    } else if ([method isEqualToString:@"multipart/form-data"]) {
+        
+        NSMutableData * body = [NSMutableData data];
+        NSString *boundary = @"0xKhTmLbOuNdArY";
+        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+        [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
+        
+        for (NSString *key in [parameters allKeys]) {
+            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary]dataUsingEncoding:NSUTF8StringEncoding]];
+            if ([[parameters[key] class] isSubclassOfClass:[NSString class]]) {
+                [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameters[key]] dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            else if([[parameters[key] class] isSubclassOfClass:[UIImage class]])
+            {
+                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:
+                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@.jpg\"\r\n", key, key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:UIImageJPEGRepresentation(parameters[key], 1.0)];
+                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            else if([[parameters[key] class] isSubclassOfClass:[NSData class]])
+            {
+                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:
+                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; \r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:parameters[key]];
+                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+            }
+            
+        }
+        [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [request setHTTPBody:body];
+    }
+    
+    return request;
+    
+}
+
+
+/* SBJson 같은 외부 Lib를 사용하고 싶다면?
  * 아래 코드를 추가하면 된다.
  
  Class serializer = nil;

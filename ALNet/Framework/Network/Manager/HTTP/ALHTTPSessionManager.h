@@ -12,12 +12,13 @@
 #import "ALHTTPSessionManagerProtocol.h"
 
 @interface ALHTTPSessionManager : ALSessionManager <ALHTTPSessionManagerProtocol>
-{
-    __weak id _target;
-    SEL _selector;
-}
 
-@property (strong, nonatomic) id requestInfo;   // 송신, 수신에 대한 정보
-@property (strong, nonatomic) ALSerialization *serialization;
+@property (nonatomic, strong) ALSerialization *serialization;
+
+// ALHTTPSessionManager - Standard alone용
+- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
+- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
+- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
+- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
 
 @end

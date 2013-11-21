@@ -20,7 +20,7 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-    NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
+    NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
 }
 
 /* Notification that a data task has become a download task.  No
@@ -29,7 +29,7 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
 didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 {
-    NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
+    NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
 }
 
 /* Sent when data is available for the delegate to consume.  It is
@@ -40,8 +40,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data
 {
-    NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
-    [self.mutableData appendData:data];
+    NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
+//    [self.mutableData appendData:data];
 //    self.downloadProgress.totalUnitCount += [data length];
 }
 
@@ -55,7 +55,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
  willCacheResponse:(NSCachedURLResponse *)proposedResponse
  completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
 {
-    NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
+    NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
 }
 
 @end

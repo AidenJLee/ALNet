@@ -13,8 +13,11 @@
 @property (nonatomic, strong) NSIndexSet *statusCodes;
 @property (nonatomic, strong) NSSet *contentTypes;
 
+// Data -> JSONObject
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data;
-
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                 URLString:(NSString *)URLString
+                                parameters:(NSDictionary *)parameters;
 
 #pragma mark -
 #pragma mark JSON Parsing Method

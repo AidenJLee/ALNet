@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ALTransaction.h"
 
 @interface ALMainViewController : UIViewController
+{
+    ALTransaction *_alt;
+}
 
 @end

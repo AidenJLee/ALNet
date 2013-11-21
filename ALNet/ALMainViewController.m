@@ -14,11 +14,13 @@
 
 @implementation ALMainViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        // Custom initialization
+        _alt = [[ALTransaction alloc] initWithTarget:self
+                                     successSelector:@selector(recieveSuccess:)
+                                     failureSelector:@selector(recieveFailure:)];
     }
     return self;
 }
@@ -26,13 +28,70 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+//    [_alt sendRequestForUserInfo:@{
+//                                   @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation",
+//                                   @"httpMethod" : @"post",
+//                                   @"param": @{ @"aa": @"postValue"}
+//                                   }];
+    
+}
+
+- (IBAction)sendPost:(id)sender {
+    [_alt sendRequestForUserInfo:@{
+                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/create",
+                                   @"httpMethod" : @"post",
+                                   @"type"       : @"json",
+                                   @"param"  : @{
+                                           @"appid": @"asfdsfa",
+                                           @"nickname": @"aidenjlee",
+                                           @"password": @"entist",
+                                           @"openidname": @"gamecenter",
+                                           @"openidid": @"1412523515",
+                                           @"openidtype": @"FACEBOOK",
+                                           @"country": @"ko_kr",
+                                           @"locale": @"seoul_korea"
+                                           }
+                                   }];
+}
+
+- (IBAction)sendPostForFind:(id)sender {
+    [_alt sendRequestForUserInfo:@{
+                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/find",
+                                   @"httpMethod" : @"post",
+                                   @"type"       : @"json",
+                                   @"param"  : @{ @"_id": @"528d25bf8055296c3a000001" }
+                                   }];
+}
+
+- (IBAction)sendPostForLogin:(id)sender {
+    [_alt sendRequestForUserInfo:@{
+                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/login",
+                                   @"httpMethod" : @"post",
+                                   @"type"       : @"json",
+                                   @"param"  : @{
+                                                    @"appid": @"asfdsfa",
+                                                    @"openidid": @"1412523515",
+                                                    @"openidtype": @"FACEBOOK"
+                                                  }
+                                   }];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)recieveSuccess:(id)result
+{
+    NSLog(@"recieveSuccess : %@", result);
+}
+
+- (void)recieveFailure:(id)result
+{
+    NSLog(@"recieveFailure : %@", result);
 }
 
 @end

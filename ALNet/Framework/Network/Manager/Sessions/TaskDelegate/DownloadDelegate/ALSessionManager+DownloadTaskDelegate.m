@@ -9,9 +9,6 @@
 #import "ALSessionManager+DownloadTaskDelegate.h"
 #import "ALCacheManager.h"
 
-NSString * const DOWNLOAD_SUCCESS_NOTI = @"DownloadTaskDidSuccessNotification";
-NSString * const FILE_SAVE_ERROR_NOTI  = @"FileSaveFailNotification";
-
 @implementation ALSessionManager (DownloadTaskDelegate)
 
 #pragma mark -
@@ -27,16 +24,18 @@ NSString * const FILE_SAVE_ERROR_NOTI  = @"FileSaveFailNotification";
      }
      */
     
-    self.downloadedFileURL = [[downloadTask originalRequest] URL];
+//    self.downloadedFileURL = [[downloadTask originalRequest] URL];
+    NSURL *destinationURL = [[downloadTask originalRequest] URL];
     NSData *data = [NSData dataWithContentsOfURL:location];
-    NSLog(@"downloadFileURL : %@", self.downloadedFileURL);
-    if (self.downloadedFileURL) {
-        if ([[ALCacheManager sharedInstance] saveData:data withURL:self.downloadedFileURL]) {
-            NSDictionary *dataDic = @{ @"result": @(YES), @"URL": self.downloadedFileURL };
+    NSLog(@"downloadFileURL : %@", destinationURL);
+    
+    if (destinationURL) {
+        if ([[ALCacheManager sharedInstance] saveData:data withURL:destinationURL]) {
+            NSDictionary *dataDic = @{ @"result": @(YES), @"URL": destinationURL };
             [[NSNotificationCenter defaultCenter] postNotificationName:DOWNLOAD_SUCCESS_NOTI object:downloadTask userInfo:dataDic];
         } else {
             NSDictionary *dicForError = @{ @"result": @(NO), @"error": @"fileManager save error" };
-            [[NSNotificationCenter defaultCenter] postNotificationName:FILE_SAVE_ERROR_NOTI object:downloadTask userInfo:dicForError];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FILESAVE_FAILURE_NOTI object:downloadTask userInfo:dicForError];
         }
     }
     

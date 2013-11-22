@@ -12,8 +12,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.backgroundColor = [UIColor whiteColor];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    self.mainStoryBoard = [UIStoryboard storyboardWithName:@"ALMain" bundle:nil];
+    self.window.rootViewController = [self.mainStoryBoard instantiateInitialViewController];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALUniqueKeyProtocol.h"
+#import "ALTransactionProtocol.h"
 
 #import "ALNetManager.h"
 #import "ALNetManagerProtocol.h"
 
-@interface ALTransaction : NSObject <ALUniqueKeyProtocol>
+@interface ALTransaction : NSObject <ALTransactionProtocol>
 {
     id <ALNetManagerProtocol> __weak _networkManager;
     
@@ -23,14 +23,7 @@
     SEL _failureSel;    // 비정상시 콜백
 }
 
-#pragma mark -
-#pragma mark Init
-- (id)initWithTarget:(id)target successSelector:(SEL)selSuccess failureSelector:(SEL)selFailure;
-
-#pragma mark -
-#pragma mark Public Method
-- (void)sendRequestForUserInfo:(id)userInfo;
-- (void)didFinishReceive:(NSNotification *)finishNoti; // Callback By ALNetManager
+- (void)didFinishReceive:(NSNotification *)noti; // Callback By ALNetManager
 
 #pragma mark -
 #pragma mark Public Method (for Framework)

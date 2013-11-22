@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ALTransaction.h"
+#import "ALTransactionHTTP.h"
 
 @interface ALMainViewController : UIViewController
 {
-    ALTransaction *_alt;
+    ALTransactionHTTP *_alt;
 }
 
 @property (strong, nonatomic) IBOutlet UITextView *textView;

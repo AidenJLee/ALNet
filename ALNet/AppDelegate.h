@@ -11,6 +11,8 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) UIStoryboard *mainStoryBoard;
+
 @property (copy) void (^backgroundSessionCompletionHandler)();
 
 @end

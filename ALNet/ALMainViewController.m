@@ -18,7 +18,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _alt = [[ALTransaction alloc] initWithTarget:self
+        _alt = [[ALTransactionHTTP alloc] initWithTarget:self
                                      successSelector:@selector(recieveSuccess:)
                                      failureSelector:@selector(recieveFailure:)];
     }
@@ -29,11 +29,7 @@
 {
     [super viewDidLoad];
     
-//    [_alt sendRequestForUserInfo:@{
-//                                   @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation",
-//                                   @"httpMethod" : @"post",
-//                                   @"param": @{ @"aa": @"postValue"}
-//                                   }];
+    [_alt sendRequestForUserInfo:@{ @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation" }];
     
 }
 

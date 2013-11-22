@@ -15,35 +15,43 @@
     self = [super init];
     if (self) {
         self.statusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
-        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
+        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", @"text/javascript", nil];
     }
     
     return self;
 }
 
 #pragma mark -
-#pragma makr - object Serialization
+#pragma makr - Object Serialization
+/*! NSURLResponse를 가지고 데이터 형태를 파악 후 object를 JSON형태의 데이터로 변환 해주는 메소드
+ * \param object - JSON형태를 가지고 있는 object
+ * \returns 새로운 NSString을 반환한다.
+ */
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
-//    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-//    if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
-//        ![self.contentTypes containsObject:[res MIMEType]]) {
-//        if ([data length] > 0) {
-//            return nil;
-//        }
-//    }
+    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+    if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
+        ![self.contentTypes containsObject:[res MIMEType]]) {  // ex) statusCode: 200 / MIMEType: text/plain
+        if ([data length] > 0) {
+            
+#warning 반환 형식과 상태코드에 이상이 있어서 파싱을 안함. 이 부분에 대한 에러코드 추가가 필요함.
+            return nil;
+        }
+    }
     
     NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     if (responseString && ![responseString isEqualToString:@" "]) {
-        // Workaround for a bug in NSJSONSerialization when Unicode character escape codes are used instead of the actual character
-        // See http://stackoverflow.com/a/12843465/157142
+        
+        // NSJSONSerialization bug : Unicode character escape codes are used instead of the actual character
+        // http://stackoverflow.com/a/12843465/157142
         data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
         
         if (data) {
             if ([data length] > 0) {
                 NSError *error = nil;
-                return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
+                return [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
             } else {
                 return nil;
             }
@@ -102,7 +110,9 @@
 //            }
 //        }];
         
-    } else if ([method isEqualToString:@"POST"]) {
+    } else if ([method isEqualToString:@"POST"] ||
+               [method isEqualToString:@"PUT"] ||
+               [method isEqualToString:@"DELETE"]) {
         
         [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
         [request setTimeoutInterval:30.0];                              // 30초 타임아웃
@@ -118,42 +128,6 @@
         NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:dataParam];
         
-    } else if ([method isEqualToString:@"PUT"]) {
-        
-        NSMutableData * body = [NSMutableData data];
-        NSString *boundary = @"0xKhTmLbOuNdArY";
-        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-        [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
-        
-        for (NSString *key in [parameters allKeys]) {
-            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary]dataUsingEncoding:NSUTF8StringEncoding]];
-            if ([[parameters[key] class] isSubclassOfClass:[NSString class]]) {
-                [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:[[NSString stringWithFormat:@"%@\r\n", parameters[key]] dataUsingEncoding:NSUTF8StringEncoding]];
-            }
-            else if([[parameters[key] class] isSubclassOfClass:[UIImage class]])
-            {
-                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:
-                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@.jpg\"\r\n", key, key] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:UIImageJPEGRepresentation(parameters[key], 1.0)];
-                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-            }
-            else if([[parameters[key] class] isSubclassOfClass:[NSData class]])
-            {
-                [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:
-                 [[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; \r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:parameters[key]];
-                [body appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-            }
-            
-        }
-        [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        
-        [request setHTTPBody:body];
     } else if ([method isEqualToString:@"multipart/form-data"]) {
         
         NSMutableData * body = [NSMutableData data];
@@ -208,7 +182,7 @@
     return object;
  }
  serializer = NSClassFromString(@"NSJSONSerialization");
- .... 아래 코드 ...
+ .... 여기부터는 아래 코드 추가 ...
  
  */
 

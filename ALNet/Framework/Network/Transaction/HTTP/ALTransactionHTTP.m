@@ -39,11 +39,25 @@
     
     requestInfo[@"url"]         = strURL;
     requestInfo[@"task"]        = userInfo[@"task"] ? [userInfo[@"task"] uppercaseString] : @"DATA";
-    requestInfo[@"httpMethod"]  = userInfo[@"httpMethod"] ? [userInfo[@"httpMethod"] uppercaseString] : @"GET";
     requestInfo[@"type"]        = userInfo[@"type"] ? [userInfo[@"type"] uppercaseString] : @"JSON";
+    requestInfo[@"httpMethod"]  = userInfo[@"httpMethod"] ? [userInfo[@"httpMethod"] uppercaseString] : @"GET";
     
-    requestInfo[@"param"]       = userInfo[@"param"] ? userInfo[@"param"] : @{} ;
-    requestInfo[@"customParam"] = userInfo[@"customParam"] ? userInfo[@"customParam"] : @{} ;
+    
+    NSDictionary *param = userInfo[@"param"];
+    NSDictionary *customParam = userInfo[@"customParam"];
+    
+    if (param || [param isKindOfClass:[NSDictionary class]]) {
+        requestInfo[@"param"] = param;
+    } else {
+        NSLog(@"Parameter가 없거나 NSDictionary가 아닙니다");
+        requestInfo[@"param"] = @{};
+    }
+    if (customParam || [customParam isKindOfClass:[NSDictionary class]]) {
+        requestInfo[@"customParam"] = customParam;
+    } else {
+        NSLog(@"CustomParameter가 없거나 NSDictionary가 아닙니다");
+        requestInfo[@"customParam"] = @{};
+    }
     
     
     // image타입이고 2번째 URL도 들어온 경우 (thumbnail url)
@@ -52,7 +66,7 @@
     }
     
     
-    // 전송 방식이 Uplode일 때 fileURL이나 bodyData 둘중 하나는 있어야 한다.
+    // 전송 방식이 Uplode일 때 fileURL이나 bodyData 값이 있어야 한다.
     if ([requestInfo[@"task"] isEqualToString:@"UPLOAD"]) {
         
         requestInfo[@"httpMethod"] = @"POST";
@@ -104,7 +118,7 @@
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     
     if (noti.object[@"value"]) {
-        [_target performSelector:_successSel withObject:noti.object];
+        [_target performSelector:_successSel withObject:noti.object[@"value"]];
     } else {
         [_target performSelector:_failureSel withObject:noti.object];
     }

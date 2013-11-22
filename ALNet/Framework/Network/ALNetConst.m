@@ -18,11 +18,17 @@ NSString * const OPERATION_QUEUE_STATUS = @"DelegateQueueOperationCount";
 
 
 #pragma mark -
+#pragma mark Task Observing KeyPath
+
+NSString * const TASK_STATE_OBSERVING = @"state";
+
+
+#pragma mark -
 #pragma mark - Notifications
 
 NSString * const DOWNLOAD_SUCCESS_NOTI = @"DownloadTaskDidSuccessNotification";
 NSString * const FILESAVE_FAILURE_NOTI = @"DownloadedFileSaveFailNotification";
 
-NSString * const TASK_DID_START_NOTI   = @"";
-NSString * const TASK_DID_FINISH_NOTI  = @"";
-NSString * const TASK_DID_SUSPEND_NOTI = @"";
+NSString * const TASK_DID_START_NOTI   = @"TaskDidStartNotification";
+NSString * const TASK_DID_SUSPEND_NOTI = @"TaskDidSuspendNotification";
+NSString * const TASK_DID_FINISH_NOTI  = @"TaskDidFinishNotification";

@@ -13,13 +13,12 @@
 
 #pragma mark -
 #pragma mark Initialization
-- (instancetype)initWithConfig:(NSURLSessionConfiguration *)configuration
-                        Target:(id)target
+- (instancetype)initWithTarget:(id)target
                       selector:(SEL)selector
-                   requestInfo:(NSDictionary *)requestInfo
+                 configuration:(NSURLSessionConfiguration *)configuration
 {
     
-    self = [super initWithConfig:configuration Target:target selector:selector requestInfo:requestInfo];
+    self = [super initWithTarget:target selector:selector configuration:configuration];
     if (self) {
         _serialization = [[ALSerialization alloc] init];
 	}
@@ -44,13 +43,10 @@
         }
         if (completionHandler) {
             id value = [self.serialization objectForResponse:response data:data];
-            if (value) {
-                self.requestInfo[@"value"] = value;
-            } else {
-                self.requestInfo[@"value"] = @{};
-            }
-            
-            completionHandler(task, self.requestInfo);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+            completionHandler(task, value);
         }
     }];
     [task resume];
@@ -60,22 +56,22 @@
 - (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler
 {
     
-    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"POST" URLString:URLString parameters:parameters];
-    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-            
-        }
-        if (completionHandler) {
-            id value = [self.serialization objectForResponse:response data:data];
-            if (value) {
-                self.requestInfo[@"value"] = value;
-            } else {
-                self.requestInfo[@"value"] = @{};
-            }
-            completionHandler(task, self.requestInfo);
-        }
-    }];
-    [task resume];
+//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"POST" URLString:URLString parameters:parameters];
+//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        if (error) {
+//
+//        }
+//        if (completionHandler) {
+//            id value = [self.serialization objectForResponse:response data:data];
+//            if (value) {
+//                self.requestInfo[@"value"] = value;
+//            } else {
+//                self.requestInfo[@"value"] = @{};
+//            }
+//            completionHandler(task, self.requestInfo);
+//        }
+//    }];
+//    [task resume];
     
 }
 
@@ -116,6 +112,26 @@
     [task resume];
 }
 
+- (void)somethingWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler
+{
+//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        if (error) {
+//            
+//        }
+//        if (completionHandler) {
+//            id value = [self.serialization objectForResponse:response data:data];
+//            if (value) {
+//                self.requestInfo[@"value"] = value;
+//            } else {
+//                self.requestInfo[@"value"] = @{};
+//            }
+//            
+//            completionHandler(task, self.requestInfo);
+//        }
+//    }];
+//    [task resume];
+}
+
 - (void)GET:(NSURL *)URL parameters:(NSDictionary *)parameters
 {
     
@@ -128,7 +144,7 @@
             
         }
         [self.serialization objectForResponse:response data:data];
-        [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+//        [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
     }];
     [task resume];
     

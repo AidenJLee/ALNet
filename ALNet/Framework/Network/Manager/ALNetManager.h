@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "ALNetManagerProtocol.h"
+
 #import "ALHTTPSessionManager.h"
+#import "ALSessionConfiguration.h"
 
 @interface ALNetManager : NSObject <ALNetManagerProtocol>
-
-
-#pragma mark -
-#pragma mark Singleton Creation & Destruction Method
 
 + (ALNetManager *)sharedInstance;
 + (void)releaseSharedInstance;

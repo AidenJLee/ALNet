@@ -41,7 +41,7 @@ static ALNetManager *__instance = nil;
 
 
 #pragma mark -
-#pragma mark Init
+#pragma mark Initialization
 
 - (instancetype)init
 {
@@ -49,8 +49,7 @@ static ALNetManager *__instance = nil;
     self = [super init];
     
     if (self) {
-        // do something
-        // anything for init
+        
     }
     
     return self;
@@ -74,22 +73,34 @@ static ALNetManager *__instance = nil;
         return;
     }
     
-    strURL = [strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
+    
+    strURL = [strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    
     // Configuration Custom 가능 - ALConfiguration.h에서
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
+    
+    NSString *strTask = requestInfo[@"task"];
+    if ([strTask isEqualToString:@"DOWNLOAD"]) {
+        config = [ALSessionConfiguration backgroundConfiguration];
+    } else if ([strTask isEqualToString:@"UPLOAD"]) {
+        // 딱히 설정 바꿔야 하는게 있다면.... 변경
+        // 하지만 아마 없을꺼야...
+    }
+    
+    
     if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
         config = nil;
     }
     
-    ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithConfig:config
-                                                                                 Target:self
+    ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
-                                                                            requestInfo:requestInfo];
+                                                                          configuration:config];
     
+    NSMutableURLRequest *request = [sessionManager.serialization requestWithMethod:requestInfo[@"httpMethod"] URLString:strURL parameters:requestInfo[@"param"]];
     
     [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -126,7 +137,7 @@ static ALNetManager *__instance = nil;
 
 
 #pragma mark -
-#pragma mark - NSKeyValueObserving
+#pragma mark NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change

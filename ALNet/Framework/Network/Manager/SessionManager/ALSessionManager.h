@@ -8,37 +8,29 @@
 
 #import <Foundation/Foundation.h>
 #import "ALNetConst.h"
+#import "ALSessionManagerProtocol.h"
 
-@interface ALSessionManager : NSObject <NSURLSessionDelegate>
+@interface ALSessionManager : NSObject <NSURLSessionDelegate, ALSessionManagerProtocol>
 {
     __weak id _target;
     SEL _selector;
 }
 
+// ALSessionManager
+@property (readonly, strong, nonatomic) NSURLSession *session;
 
-#pragma mark -
-#pragma mark - ALSessionManager
-@property (nonatomic, strong) id requestInfo;   // 송신, 수신에 대한 정보
-@property (nonatomic, strong, readonly) NSURLSession *session;
-
-// ALSessionManager + TaskDelegate
+// ALSessionManager + TaskDelegate ()
 @property (copy, nonatomic) NSURL *downloadedFileURL;
-//@property (strong, nonatomic) NSMutableData *mutableData;
 @property (strong, nonatomic) NSProgress *uploadProgress;
 @property (strong, nonatomic) NSProgress *downloadProgress;
+//@property (strong, nonatomic) NSMutableData *mutableData;
 
 
-// Init
-- (id)initWithConfig:(NSURLSessionConfiguration *)configuration
-              Target:(id)target
-            selector:(SEL)selector
-         requestInfo:(NSDictionary *)requestInfo;
+// Data Task Observing
+- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
-// Public Method
-- (void)invalidateSessionCancel;
-- (void)invalidateAndFinishTasksCancel;
-
-// Upload Task
+// Upload Task Observing
 - (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
                                          fromFile:(NSURL *)fileURL
                                 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
@@ -46,7 +38,7 @@
                                          fromData:(NSData *)bodyData
                                 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
-// Download Task
+// Download Task Observing
 - (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
                                     completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
 - (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData

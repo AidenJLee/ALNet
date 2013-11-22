@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F1C3D1C183F4275004AC9BD /* ALHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D1B183F4275004AC9BD /* ALHTTPSessionManager.m */; };
+		0F1C3D2A183F4299004AC9BD /* ALSessionManager+TaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D22183F4299004AC9BD /* ALSessionManager+TaskDelegate.m */; };
+		0F1C3D2B183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D25183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.m */; };
+		0F1C3D2C183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D28183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.m */; };
+		0F1C3D2F183F4D1A004AC9BD /* ALSessionConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */; };
 		0F642321183F329000BB5510 /* ALNetConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6422F7183F329000BB5510 /* ALNetConst.m */; };
 		0F642322183F329000BB5510 /* ALNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6422FA183F329000BB5510 /* ALNetManager.m */; };
 		0F642323183F329000BB5510 /* ALSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F642300183F329000BB5510 /* ALSessionManager.m */; };
@@ -16,11 +21,6 @@
 		0F64232C183F329000BB5510 /* ALTransactionHTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F64231C183F329000BB5510 /* ALTransactionHTTP.m */; };
 		0F64232D183F329000BB5510 /* ALTransactionTCPIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F64231F183F329000BB5510 /* ALTransactionTCPIP.m */; };
 		0F64232E183F329000BB5510 /* UserInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F642320183F329000BB5510 /* UserInfo.plist */; };
-		0F642340183F33FB00BB5510 /* ALHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F642331183F33FB00BB5510 /* ALHTTPSessionManager.m */; };
-		0F642341183F33FB00BB5510 /* ALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F642336183F33FB00BB5510 /* ALConfiguration.m */; };
-		0F642342183F33FB00BB5510 /* ALSessionManager+TaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F642339183F33FB00BB5510 /* ALSessionManager+TaskDelegate.m */; };
-		0F642343183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F64233C183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.m */; };
-		0F642344183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F64233F183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.m */; };
 		0FD88C7B1839EE7D0001A051 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FD88C7A1839EE7D0001A051 /* Foundation.framework */; };
 		0FD88C7D1839EE7D0001A051 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FD88C7C1839EE7D0001A051 /* CoreGraphics.framework */; };
 		0FD88C7F1839EE7D0001A051 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FD88C7E1839EE7D0001A051 /* UIKit.framework */; };
@@ -51,6 +51,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F1C3D08183F3974004AC9BD /* ALSessionManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALSessionManagerProtocol.h; sourceTree = "<group>"; };
+		0F1C3D1A183F4275004AC9BD /* ALHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALHTTPSessionManager.h; sourceTree = "<group>"; };
+		0F1C3D1B183F4275004AC9BD /* ALHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALHTTPSessionManager.m; sourceTree = "<group>"; };
+		0F1C3D21183F4299004AC9BD /* ALSessionManager+TaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+TaskDelegate.h"; sourceTree = "<group>"; };
+		0F1C3D22183F4299004AC9BD /* ALSessionManager+TaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+TaskDelegate.m"; sourceTree = "<group>"; };
+		0F1C3D24183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+DataTaskDelegate.h"; sourceTree = "<group>"; };
+		0F1C3D25183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+DataTaskDelegate.m"; sourceTree = "<group>"; };
+		0F1C3D27183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+DownloadTaskDelegate.h"; sourceTree = "<group>"; };
+		0F1C3D28183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+DownloadTaskDelegate.m"; sourceTree = "<group>"; };
+		0F1C3D2D183F4D1A004AC9BD /* ALSessionConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALSessionConfiguration.h; sourceTree = "<group>"; };
+		0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALSessionConfiguration.m; sourceTree = "<group>"; };
 		0F6422F6183F329000BB5510 /* ALNetConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALNetConst.h; sourceTree = "<group>"; };
 		0F6422F7183F329000BB5510 /* ALNetConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALNetConst.m; sourceTree = "<group>"; };
 		0F6422F9183F329000BB5510 /* ALNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALNetManager.h; sourceTree = "<group>"; };
@@ -69,17 +80,6 @@
 		0F64231E183F329000BB5510 /* ALTransactionTCPIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALTransactionTCPIP.h; sourceTree = "<group>"; };
 		0F64231F183F329000BB5510 /* ALTransactionTCPIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALTransactionTCPIP.m; sourceTree = "<group>"; };
 		0F642320183F329000BB5510 /* UserInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserInfo.plist; sourceTree = "<group>"; };
-		0F642330183F33FB00BB5510 /* ALHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALHTTPSessionManager.h; sourceTree = "<group>"; };
-		0F642331183F33FB00BB5510 /* ALHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALHTTPSessionManager.m; sourceTree = "<group>"; };
-		0F642332183F33FB00BB5510 /* ALHTTPSessionManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALHTTPSessionManagerProtocol.h; sourceTree = "<group>"; };
-		0F642335183F33FB00BB5510 /* ALConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALConfiguration.h; sourceTree = "<group>"; };
-		0F642336183F33FB00BB5510 /* ALConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALConfiguration.m; sourceTree = "<group>"; };
-		0F642338183F33FB00BB5510 /* ALSessionManager+TaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+TaskDelegate.h"; sourceTree = "<group>"; };
-		0F642339183F33FB00BB5510 /* ALSessionManager+TaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+TaskDelegate.m"; sourceTree = "<group>"; };
-		0F64233B183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+DataTaskDelegate.h"; sourceTree = "<group>"; };
-		0F64233C183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+DataTaskDelegate.m"; sourceTree = "<group>"; };
-		0F64233E183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALSessionManager+DownloadTaskDelegate.h"; sourceTree = "<group>"; };
-		0F64233F183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALSessionManager+DownloadTaskDelegate.m"; sourceTree = "<group>"; };
 		0FD88C771839EE7D0001A051 /* ALNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ALNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FD88C7A1839EE7D0001A051 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0FD88C7C1839EE7D0001A051 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -130,6 +130,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F1C3D1D183F4299004AC9BD /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C3D2D183F4D1A004AC9BD /* ALSessionConfiguration.h */,
+				0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		0F1C3D20183F4299004AC9BD /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C3D21183F4299004AC9BD /* ALSessionManager+TaskDelegate.h */,
+				0F1C3D22183F4299004AC9BD /* ALSessionManager+TaskDelegate.m */,
+				0F1C3D23183F4299004AC9BD /* DataDelegate */,
+				0F1C3D26183F4299004AC9BD /* DownloadDelegate */,
+			);
+			path = Task;
+			sourceTree = "<group>";
+		};
+		0F1C3D23183F4299004AC9BD /* DataDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C3D24183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.h */,
+				0F1C3D25183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.m */,
+			);
+			path = DataDelegate;
+			sourceTree = "<group>";
+		};
+		0F1C3D26183F4299004AC9BD /* DownloadDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C3D27183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.h */,
+				0F1C3D28183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.m */,
+			);
+			path = DownloadDelegate;
+			sourceTree = "<group>";
+		};
 		0F6422F5183F329000BB5510 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,37 +184,24 @@
 		0F6422F8183F329000BB5510 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				0F6422FB183F329000BB5510 /* ALNetManagerProtocol.h */,
 				0F6422F9183F329000BB5510 /* ALNetManager.h */,
 				0F6422FA183F329000BB5510 /* ALNetManager.m */,
-				0F6422FB183F329000BB5510 /* ALNetManagerProtocol.h */,
-				0F6422FC183F329000BB5510 /* ConnectionManager */,
 				0F6422FE183F329000BB5510 /* SessionManager */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		0F6422FC183F329000BB5510 /* ConnectionManager */ = {
-			isa = PBXGroup;
-			children = (
-				0F6422FD183F329000BB5510 /* Operation */,
-			);
-			path = ConnectionManager;
-			sourceTree = "<group>";
-		};
-		0F6422FD183F329000BB5510 /* Operation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Operation;
-			sourceTree = "<group>";
-		};
 		0F6422FE183F329000BB5510 /* SessionManager */ = {
 			isa = PBXGroup;
 			children = (
+				0F1C3D08183F3974004AC9BD /* ALSessionManagerProtocol.h */,
 				0F6422FF183F329000BB5510 /* ALSessionManager.h */,
 				0F642300183F329000BB5510 /* ALSessionManager.m */,
-				0F64232F183F33FB00BB5510 /* HTTPSession */,
-				0F642333183F33FB00BB5510 /* SessionCustom */,
+				0F1C3D1A183F4275004AC9BD /* ALHTTPSessionManager.h */,
+				0F1C3D1B183F4275004AC9BD /* ALHTTPSessionManager.m */,
+				0F1C3D20183F4299004AC9BD /* Task */,
+				0F1C3D1D183F4299004AC9BD /* Configuration */,
 			);
 			path = SessionManager;
 			sourceTree = "<group>";
@@ -219,63 +244,6 @@
 				0F64231F183F329000BB5510 /* ALTransactionTCPIP.m */,
 			);
 			path = TCPIP;
-			sourceTree = "<group>";
-		};
-		0F64232F183F33FB00BB5510 /* HTTPSession */ = {
-			isa = PBXGroup;
-			children = (
-				0F642332183F33FB00BB5510 /* ALHTTPSessionManagerProtocol.h */,
-				0F642330183F33FB00BB5510 /* ALHTTPSessionManager.h */,
-				0F642331183F33FB00BB5510 /* ALHTTPSessionManager.m */,
-			);
-			path = HTTPSession;
-			sourceTree = "<group>";
-		};
-		0F642333183F33FB00BB5510 /* SessionCustom */ = {
-			isa = PBXGroup;
-			children = (
-				0F642337183F33FB00BB5510 /* Task */,
-				0F642334183F33FB00BB5510 /* Configuration */,
-			);
-			path = SessionCustom;
-			sourceTree = "<group>";
-		};
-		0F642334183F33FB00BB5510 /* Configuration */ = {
-			isa = PBXGroup;
-			children = (
-				0F642335183F33FB00BB5510 /* ALConfiguration.h */,
-				0F642336183F33FB00BB5510 /* ALConfiguration.m */,
-			);
-			path = Configuration;
-			sourceTree = "<group>";
-		};
-		0F642337183F33FB00BB5510 /* Task */ = {
-			isa = PBXGroup;
-			children = (
-				0F642338183F33FB00BB5510 /* ALSessionManager+TaskDelegate.h */,
-				0F642339183F33FB00BB5510 /* ALSessionManager+TaskDelegate.m */,
-				0F64233A183F33FB00BB5510 /* DataDelegate */,
-				0F64233D183F33FB00BB5510 /* DownloadDelegate */,
-			);
-			path = Task;
-			sourceTree = "<group>";
-		};
-		0F64233A183F33FB00BB5510 /* DataDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				0F64233B183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.h */,
-				0F64233C183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.m */,
-			);
-			path = DataDelegate;
-			sourceTree = "<group>";
-		};
-		0F64233D183F33FB00BB5510 /* DownloadDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				0F64233E183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.h */,
-				0F64233F183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.m */,
-			);
-			path = DownloadDelegate;
 			sourceTree = "<group>";
 		};
 		0FD88C6E1839EE7D0001A051 = {
@@ -498,20 +466,20 @@
 			files = (
 				0F64232C183F329000BB5510 /* ALTransactionHTTP.m in Sources */,
 				0F642322183F329000BB5510 /* ALNetManager.m in Sources */,
+				0F1C3D2F183F4D1A004AC9BD /* ALSessionConfiguration.m in Sources */,
 				0F642323183F329000BB5510 /* ALSessionManager.m in Sources */,
 				0FE47517183CC19000DD1FDC /* ALMainViewController.m in Sources */,
-				0F642344183F33FB00BB5510 /* ALSessionManager+DownloadTaskDelegate.m in Sources */,
+				0F1C3D2C183F4299004AC9BD /* ALSessionManager+DownloadTaskDelegate.m in Sources */,
 				0F642329183F329000BB5510 /* ALSerialization.m in Sources */,
-				0F642343183F33FB00BB5510 /* ALSessionManager+DataTaskDelegate.m in Sources */,
+				0F1C3D2B183F4299004AC9BD /* ALSessionManager+DataTaskDelegate.m in Sources */,
+				0F1C3D1C183F4275004AC9BD /* ALHTTPSessionManager.m in Sources */,
+				0F1C3D2A183F4299004AC9BD /* ALSessionManager+TaskDelegate.m in Sources */,
 				0FD88C8B1839EE7D0001A051 /* AppDelegate.m in Sources */,
-				0F642342183F33FB00BB5510 /* ALSessionManager+TaskDelegate.m in Sources */,
 				0FD88C871839EE7D0001A051 /* main.m in Sources */,
 				0FE4750F183CA91D00DD1FDC /* UIAsyncImageView.m in Sources */,
 				0F64232B183F329000BB5510 /* ALTransaction.m in Sources */,
-				0F642341183F33FB00BB5510 /* ALConfiguration.m in Sources */,
 				0F642321183F329000BB5510 /* ALNetConst.m in Sources */,
 				0F64232D183F329000BB5510 /* ALTransactionTCPIP.m in Sources */,
-				0F642340183F33FB00BB5510 /* ALHTTPSessionManager.m in Sources */,
 				0FE47501183CA91D00DD1FDC /* ALCacheManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

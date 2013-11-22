@@ -26,7 +26,7 @@
 //    if (self.progressAction){
 //        self.progressAction((double)task.countOfBytesReceived, (double)task.countOfBytesExpectedToReceive);
 //    }
-    [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+//    [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
 }
 
 /* 업도르 종료 후 응답이 Redirection되는 경우 호출된다. */
@@ -35,7 +35,13 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
         newRequest:(NSURLRequest *)request
  completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
+    
     NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
+    
+    if (completionHandler) {
+        completionHandler(request);
+    }
+    
 }
 
 /* The task has received a request specific authentication challenge.

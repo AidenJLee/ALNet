@@ -11,7 +11,7 @@
 #define MAX_OPERATIONQUEUE_COUNT 5
 
 #pragma mark -
-#pragma mark - Session Configuration
+#pragma mark Session Configuration
 
 extern NSString * const SESSION_DOWNLOAD_ID;
 extern NSString * const OPERATION_QUEUE_NAME;
@@ -19,7 +19,12 @@ extern NSString * const OPERATION_QUEUE_STATUS;
 
 
 #pragma mark -
-#pragma mark - Notifications
+#pragma mark Task Observing KeyPath
+
+extern NSString * const TASK_STATE_OBSERVING;
+
+#pragma mark -
+#pragma mark Notifications Identification
 
 extern NSString * const TASK_DID_START_NOTI;
 extern NSString * const TASK_DID_FINISH_NOTI;

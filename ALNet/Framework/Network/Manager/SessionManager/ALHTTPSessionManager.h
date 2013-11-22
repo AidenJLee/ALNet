@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ALSerialization.h"
 #import "ALSessionManager.h"
-#import "ALHTTPSessionManagerProtocol.h"
 
-@interface ALHTTPSessionManager : ALSessionManager <ALHTTPSessionManagerProtocol>
+@interface ALHTTPSessionManager : ALSessionManager
 
 @property (nonatomic, strong) ALSerialization *serialization;
 

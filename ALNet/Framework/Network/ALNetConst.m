@@ -32,3 +32,9 @@ NSString * const FILESAVE_FAILURE_NOTI = @"DownloadedFileSaveFailNotification";
 NSString * const TASK_DID_START_NOTI   = @"TaskDidStartNotification";
 NSString * const TASK_DID_SUSPEND_NOTI = @"TaskDidSuspendNotification";
 NSString * const TASK_DID_FINISH_NOTI  = @"TaskDidFinishNotification";
+
+
+#pragma mark -
+#pragma mark ALNetError Description
+
+NSString * const NETWORKING_ERROR_DOMAIN = @"NetworkingErrorDomain";

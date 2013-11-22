@@ -7,6 +7,7 @@
 //
 
 #import "ALSerialization.h"
+#import "ALNetConst.h"
 
 @implementation ALSerialization
 
@@ -15,7 +16,7 @@
     self = [super init];
     if (self) {
         self.statusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
-        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", @"text/javascript", nil];
+        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
     }
     
     return self;
@@ -24,38 +25,42 @@
 #pragma mark -
 #pragma makr - Object Serialization
 /*! NSURLResponse를 가지고 데이터 형태를 파악 후 object를 JSON형태의 데이터로 변환 해주는 메소드
- * \param object - JSON형태를 가지고 있는 object
- * \returns 새로운 NSString을 반환한다.
+ * \param response 서버의 응답 형태
+ * \param data 서버에서 내려 받은 데이터
+ * \returns JSON Object를 반환한다.
  */
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
+    NSDictionary *requestFailInfo = nil;
+    
+    
     NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
     if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
         ![self.contentTypes containsObject:[res MIMEType]]) {  // ex) statusCode: 200 / MIMEType: text/plain
-        if ([data length] > 0) {
-            
-#warning 반환 형식과 상태코드에 이상이 있어서 파싱을 안함. 이 부분에 대한 에러코드 추가가 필요함.
-            return nil;
-        }
+        
+        NSString *strDescription = [NSString stringWithFormat:@"Request failed: %@ (%d) / %@", [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode], res.statusCode, [response MIMEType]];
+        
+        requestFailInfo = @{ @"description": strDescription };
+        
     }
-    
+    //@"text/plain"
     NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    if (responseString && ![responseString isEqualToString:@" "]) {
+    data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    if ([data length] > 0) {
         
-        // NSJSONSerialization bug : Unicode character escape codes are used instead of the actual character
-        // http://stackoverflow.com/a/12843465/157142
-        data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error = nil;
+        // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
+        id resultObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
         
-        if (data) {
-            if ([data length] > 0) {
-                NSError *error = nil;
-                // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
-                return [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            } else {
-                return nil;
-            }
+        if (error) {
+            resultObject[@"error"] = @{
+                                          @"errorCode": @3030,
+                                          @"description":[error description]
+                                        };
         }
+        return resultObject;
     }
     
     return nil;
@@ -68,6 +73,7 @@
                                  URLString:(NSString *)URLString
                                 parameters:(NSDictionary *)parameters
 {
+    
     NSParameterAssert(method);
     NSParameterAssert(URLString);
     NSParameterAssert(parameters);
@@ -89,7 +95,6 @@
     
     if ([method isEqualToString:@"GET"]) {
         
-        
         // 앞에 ?를 붙여준다.
         if ([strParam length] != 0) {
             [strParam insertString:@"?" atIndex:0];
@@ -102,14 +107,6 @@
         [request setHTTPMethod:method];
         [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", URLString, strEncodeParam]]];
         
-//        NSMutableDictionary *mutableHTTPRequestHeaders = requestInfo[@"httpHeaderField"];
-//        
-//        [mutableHTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
-//            if (![request valueForHTTPHeaderField:field]) {
-//                [request setValue:value forHTTPHeaderField:field];
-//            }
-//        }];
-        
     } else if ([method isEqualToString:@"POST"] ||
                [method isEqualToString:@"PUT"] ||
                [method isEqualToString:@"DELETE"]) {
@@ -118,11 +115,6 @@
         [request setTimeoutInterval:30.0];                              // 30초 타임아웃
         [request setHTTPMethod:method];
         [request setURL:[NSURL URLWithString:URLString]];
-        
-//        NSMutableData *data = [[NSMutableData alloc] init];
-//        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-//        [archiver encodeObject:parameters forKey:@"parameters"];
-//        [archiver finishEncoding];
         
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];

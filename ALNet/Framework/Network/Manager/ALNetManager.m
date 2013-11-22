@@ -102,13 +102,13 @@ static ALNetManager *__instance = nil;
     
     NSMutableURLRequest *request = [sessionManager.serialization requestWithMethod:requestInfo[@"httpMethod"] URLString:strURL parameters:requestInfo[@"param"]];
     
-    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
-                                                                object:responseObject
-                                                              userInfo:nil];
-        });
-    }];
+//    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
+//                                                                object:responseObject
+//                                                              userInfo:nil];
+//        });
+//    }];
 //    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
 //        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
 //                                                            object:responseObject
@@ -118,21 +118,30 @@ static ALNetManager *__instance = nil;
     [sessionManager.session.delegateQueue addObserver:self forKeyPath:OPERATION_QUEUE_STATUS options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
     
     
+}
+
+
+#pragma mark -
+#pragma mark Connection Callback
+
+- (void)didFinishConnectionWithResult:(id)result
+{
     
-//    NSString *httpMethod = requestInfo[@"httpMethod"];
-//    
-//    if ([httpMethod isEqualToString:@"GET"]) {
-//        [sessionManager GET:[NSURL URLWithString:strURL] parameters:requestInfo[@"param"]];
-//    } else if ([httpMethod isEqualToString:@"POST"]) {
-//        
-//    } else if ([httpMethod isEqualToString:@"PUT"]) {
-//        
-//    } else if ([httpMethod isEqualToString:@"DELETE"]) {
-//        
-//    } else {
-//        
-//    }
-    
+    if ([result[@"type"] isEqualToString:@"image"]) {
+        
+        UIAsyncImageView *imageView = nil;
+        
+        if ([result[@"customParam"][@"imageView"] isKindOfClass:[UIAsyncImageView class]]) {
+            imageView = (UIAsyncImageView *)result[@"customParam"][@"imageView"];
+        }
+        
+        [imageView setImageForReceivedURL:result[@"url"]];
+        
+    } else  {
+        [[NSNotificationCenter defaultCenter] postNotificationName:result[@"notiIdentifier"]
+                                                            object:result
+                                                          userInfo:nil];
+    }
 }
 
 
@@ -157,27 +166,6 @@ static ALNetManager *__instance = nil;
     }
 }
 
-#pragma mark -
-#pragma mark Connection Callback
 
-- (void)didFinishConnectionWithResult:(id)result
-{
-    
-    if ([result[@"type"] isEqualToString:@"image"]) {
-        
-        UIAsyncImageView *imageView = nil;
-        
-        if ([result[@"customParam"][@"imageView"] isKindOfClass:[UIAsyncImageView class]]) {
-            imageView = (UIAsyncImageView *)result[@"customParam"][@"imageView"];
-        }
-        
-        [imageView setImageForReceivedURL:result[@"url"]];
-        
-    } else  {
-        [[NSNotificationCenter defaultCenter] postNotificationName:result[@"notiIdentifier"]
-                                                            object:result
-                                                          userInfo:nil];
-    }
-}
 
 @end

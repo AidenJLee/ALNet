@@ -15,9 +15,9 @@
 @property (nonatomic, strong) ALSerialization *serialization;
 
 // ALHTTPSessionManager - Standard alone용
-- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
-- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
-- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(NSURLSessionDataTask *task, id responseObject))completionHandler;
+- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler;
+- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler;
+- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler;
+- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler;
 
 @end

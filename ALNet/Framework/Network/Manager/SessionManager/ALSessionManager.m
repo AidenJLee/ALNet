@@ -139,66 +139,7 @@ static void *ContextTaskState = &ContextTaskState;
 }
 
 
-#pragma mark -
-#pragma mark - DataTask Method Implement
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
-    [self addObserverForTask:dataTask];
-    return dataTask;
-    
-}
-
-#pragma mark -
-#pragma makr - UploadTask Method Implement
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromFile:fileURL];
-    [self addObserverForTask:uploadTask];
-    return uploadTask;
-    
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromData:bodyData];
-    [self addObserverForTask:uploadTask];
-    return uploadTask;
-    
-}
-
-
-#pragma mark -
-#pragma makr - Download Task Method Implement
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithRequest:request];
-    [self addObserverForTask:downloadTask];
-    return downloadTask;
-    
-}
-
-- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
-                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithResumeData:resumeData];
-    [self addObserverForTask:downloadTask];
-    return downloadTask;
-    
-}
-
-// Add Observer Method Implement
+// Add NSKeyValueObserving For Task Method Implement
 - (void)addObserverForTask:(id)task
 {
     [task addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:ContextTaskState];
@@ -245,6 +186,68 @@ static void *ContextTaskState = &ContextTaskState;
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+    
+}
+
+
+#pragma mark -
+#pragma mark - DataTask Method Implement
+- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+{
+    
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
+    [self addObserverForTask:dataTask];
+    return dataTask;
+    
+}
+
+#pragma mark -
+#pragma makr - UploadTask Method Implement
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+                                         fromFile:(NSURL *)fileURL
+                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+{
+    
+    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromFile:fileURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+    }];
+    [self addObserverForTask:uploadTask];
+    return uploadTask;
+    
+}
+
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+                                         fromData:(NSData *)bodyData
+                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+{
+    
+    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromData:bodyData];
+    [self addObserverForTask:uploadTask];
+    return uploadTask;
+    
+}
+
+
+#pragma mark -
+#pragma makr - Download Task Method Implement
+- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
+                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
+{
+    
+    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithRequest:request];
+    [self addObserverForTask:downloadTask];
+    return downloadTask;
+    
+}
+
+- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
+                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
+{
+    
+    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithResumeData:resumeData];
+    [self addObserverForTask:downloadTask];
+    return downloadTask;
     
 }
 

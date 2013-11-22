@@ -25,24 +25,26 @@
 @property (strong, nonatomic) NSProgress *downloadProgress;
 //@property (strong, nonatomic) NSMutableData *mutableData;
 
+// Add NSKeyValueObserving For Task Method Implement
+- (void)addObserverForTask:(id)task;
 
-// Data Task Observing
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-
-// Upload Task Observing
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-
-// Download Task Observing
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
-- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
-                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
+//// Data Task Observing
+//- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
+//                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+//
+//// Upload Task Observing
+//- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+//                                         fromFile:(NSURL *)fileURL
+//                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+//- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
+//                                         fromData:(NSData *)bodyData
+//                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+//
+//// Download Task Observing
+//- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
+//                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
+//- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
+//                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler;
 
 
 

@@ -18,6 +18,7 @@ extern NSString * const OPERATION_QUEUE_NAME;
 extern NSString * const OPERATION_QUEUE_STATUS;
 
 
+
 #pragma mark -
 #pragma mark Task Observing KeyPath
 
@@ -35,7 +36,9 @@ extern NSString * const FILESAVE_FAILURE_NOTI;
 
 
 #pragma mark -
-#pragma mark ALNetErrorCode
+#pragma mark ALNetError Description
+
+extern NSString * const NETWORKING_ERROR_DOMAIN;
 
 /**에러코드 정의*/
 typedef enum ALNetErrorCode : NSInteger

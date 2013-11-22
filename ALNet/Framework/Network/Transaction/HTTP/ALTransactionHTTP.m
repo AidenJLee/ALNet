@@ -29,19 +29,18 @@
 - (void)sendRequestForUserInfo:(id)userInfo
 {
     
-    if (!userInfo[@"url"]) {
+    NSString *strURL = userInfo[@"url"];
+    if (!strURL) {
         return;
     }
     
     [self addNotificationObserver];
     NSMutableDictionary *requestInfo = [[NSMutableDictionary alloc] initWithCapacity:10];
-    //    NSString *strDicPath = [[NSBundle mainBundle] pathForResource:@"RequestInfo" ofType:@"plist"];
-    //    NSMutableDictionary *requestInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:strDicPath];
     
-    requestInfo[@"url"]         = userInfo[@"url"];
-    requestInfo[@"type"]        = userInfo[@"type"] ? [userInfo[@"type"] uppercaseString] : @"JSON";
+    requestInfo[@"url"]         = strURL;
     requestInfo[@"task"]        = userInfo[@"task"] ? [userInfo[@"task"] uppercaseString] : @"DATA";
     requestInfo[@"httpMethod"]  = userInfo[@"httpMethod"] ? [userInfo[@"httpMethod"] uppercaseString] : @"GET";
+    requestInfo[@"type"]        = userInfo[@"type"] ? [userInfo[@"type"] uppercaseString] : @"JSON";
     
     requestInfo[@"param"]       = userInfo[@"param"] ? userInfo[@"param"] : @{} ;
     requestInfo[@"customParam"] = userInfo[@"customParam"] ? userInfo[@"customParam"] : @{} ;

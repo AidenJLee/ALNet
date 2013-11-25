@@ -49,10 +49,37 @@ static ALNetManager *__instance = nil;
     self = [super init];
     
     if (self) {
-        
+        _operationQueue = [self.class operationQueue];
+        [_operationQueue addObserver:self forKeyPath:OPERATION_QUEUE_STATUS options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
     }
     
     return self;
+    
+}
+
+
+#pragma mark -
+#pragma mark OperationQueue Method Implement
++ (NSOperationQueue *)operationQueue
+{
+    
+    static NSOperationQueue *_sharedQueue = nil;
+    // 만약 생성이 되어 있지 않다면
+    if (!_sharedQueue) {
+        
+        // 한번만 생성을 한다.
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            _sharedQueue = [[NSOperationQueue alloc] init];
+            _sharedQueue.name = OPERATION_QUEUE_NAME;
+            _sharedQueue.maxConcurrentOperationCount = MAX_OPERATIONQUEUE_COUNT;
+            
+        });
+        
+    }
+    
+    // 생성된 인스턴스를 리턴한다.
+    return _sharedQueue;
     
 }
 
@@ -91,16 +118,11 @@ static ALNetManager *__instance = nil;
         // 하지만 아마 없을꺼야...
     }
     
-    
-    if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
-        config = nil;
-    }
-    
     ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
                                                                           configuration:config];
     
-    NSMutableURLRequest *request = [sessionManager.serialization requestWithMethod:requestInfo[@"httpMethod"] URLString:strURL parameters:requestInfo[@"param"]];
+    
     
 //    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
 //        dispatch_async(dispatch_get_main_queue(), ^{
@@ -115,7 +137,7 @@ static ALNetManager *__instance = nil;
 //                                                          userInfo:nil];
 //    }];
     
-    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OPERATION_QUEUE_STATUS options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    
     
     
 }
@@ -158,8 +180,9 @@ static ALNetManager *__instance = nil;
         if ([(NSOperationQueue *)object operationCount] <= 0) {
             // 상단 네트워크 인디케이터 끔
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            // KVO 지움
-            [(NSOperationQueue *)object removeObserver:self forKeyPath:@"operationCount" context:nil];
+            NSLog(@"operationQueue status change");
+//            // KVO 지움
+//            [(NSOperationQueue *)object removeObserver:self forKeyPath:@"operationCount" context:nil];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

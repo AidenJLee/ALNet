@@ -7,6 +7,7 @@
 //
 
 #import "ALMainViewController.h"
+#import "ALHTTPSessionManager.h"
 
 @interface ALMainViewController ()
 
@@ -28,15 +29,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self performSelector:@selector(sendHTTP) withObject:nil afterDelay:0.1];
-    
 }
 
-- (void)sendHTTP
+- (void)receiveResult:(id)result
 {
-    [_alt sendRequestForUserInfo:@{ @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation" }];
+    NSLog(@"result : %@", result);
 }
+
 - (IBAction)sendPost:(id)sender {
     [_alt sendRequestForUserInfo:@{
                                    @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/create",

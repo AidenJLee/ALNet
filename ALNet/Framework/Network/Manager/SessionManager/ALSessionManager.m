@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 
+#import "ALNetManager.h"
 #import "ALSessionManager.h"
 #import "ALSessionManager+TaskDelegate.h"
 #import "ALSessionManager+DataTaskDelegate.h"
@@ -38,9 +39,12 @@ static void *ContextTaskState = &ContextTaskState;
     self = [super init];
     if (self) {
         
+        if (!configuration) {
+            configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        }
 		_target   = target;
 		_selector = selector;
-        _session  = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[self.class operationQueue]];
+        _session  = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[ALNetManager sharedInstance].operationQueue];
         
 	}
 	return self;
@@ -88,48 +92,27 @@ static void *ContextTaskState = &ContextTaskState;
 
 
 #pragma mark -
-#pragma mark OperationQueue Method Implement
-+ (NSOperationQueue *)operationQueue
-{
-    
-    static NSOperationQueue *_sharedQueue = nil;
-    // 만약 생성이 되어 있지 않다면
-    if (!_sharedQueue) {
-        
-        // 한번만 생성을 한다.
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            _sharedQueue = [[NSOperationQueue alloc] init];
-            _sharedQueue.name = OPERATION_QUEUE_NAME;
-            _sharedQueue.maxConcurrentOperationCount = MAX_OPERATIONQUEUE_COUNT;
-        });
-        
-    }
-    
-    // 생성된 인스턴스를 리턴한다.
-    return _sharedQueue;
-    
-}
-
-
-#pragma mark -
 #pragma mark - NSURLSessionDelegate
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
+    
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.backgroundSessionCompletionHandler) {
         void (^completionHandler)() = appDelegate.backgroundSessionCompletionHandler;
         appDelegate.backgroundSessionCompletionHandler = nil;
         completionHandler();
     }
+    
 }
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
+    
     NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
     if (error) {
         NSLog(@" %@", error.description);
     }
+    
 }
 
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge

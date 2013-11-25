@@ -18,6 +18,7 @@
 
 // ALSessionManager
 @property (readonly, strong, nonatomic) NSURLSession *session;
+@property (nonatomic, strong) id requestInfo;   // 송신, 수신에 대한 정보
 
 // ALSessionManager + TaskDelegate ()
 @property (copy, nonatomic) NSURL *downloadedFileURL;

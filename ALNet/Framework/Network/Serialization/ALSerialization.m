@@ -16,7 +16,7 @@
     self = [super init];
     if (self) {
         self.statusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
-        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
+        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", @"text/javascript", nil];
     }
     
     return self;
@@ -44,7 +44,7 @@
         requestFailInfo = @{ @"description": strDescription };
         
     }
-    //@"text/plain"
+    
     NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -74,6 +74,9 @@
                                 parameters:(NSDictionary *)parameters
 {
     
+    if (!parameters) {
+        parameters = @{};
+    }
     NSParameterAssert(method);
     NSParameterAssert(URLString);
     NSParameterAssert(parameters);
@@ -117,6 +120,7 @@
         [request setURL:[NSURL URLWithString:URLString]];
         
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//        NSData *jsonData = [self.class JSON]
         NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:dataParam];
         
@@ -209,7 +213,7 @@
  * \param object - JSON형태를 가지고 있는 object
  * \returns 새로운 NSData를 반환한다.
  */
-+ (NSData *)JSONDataFromJSONObject:(id)object
++ (NSData *)dataFromJSONObject:(id)object
 {
     NSError *error = nil;
     return [NSJSONSerialization dataWithJSONObject:object options:NSJSONWritingPrettyPrinted error:&error];
@@ -219,7 +223,7 @@
  * \param object - JSON형태를 가지고 있는 object
  * \returns 새로운 NSString을 반환한다.
  */
-+ (NSString *)JSONStringFromObject:(id)object
++ (NSString *)stringFromObject:(id)object
 {
     NSData *data = [[self class] JSONDataFromJSONObject:object];
     NSString *JSONString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

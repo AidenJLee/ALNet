@@ -110,7 +110,7 @@ static ALNetManager *__instance = nil;
     }
     
     
-    [sessionManager sendHTTPRequestWithRequestInfo:requestInfo];
+    [sessionManager sendHTTPWithRequestInfo:requestInfo];
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

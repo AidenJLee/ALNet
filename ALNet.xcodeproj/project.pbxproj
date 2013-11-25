@@ -352,8 +352,8 @@
 		0FE474D1183CA91D00DD1FDC /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				0F0134C918433BBB005E11A0 /* Standardinformation */,
 				0F6422F5183F329000BB5510 /* Network */,
+				0F0134C918433BBB005E11A0 /* Standardinformation */,
 				0FE474D2183CA91D00DD1FDC /* Convenience */,
 				0FE474FD183CA91D00DD1FDC /* UIKit */,
 			);

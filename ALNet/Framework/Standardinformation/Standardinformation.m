@@ -7,6 +7,7 @@
 //
 
 #import "Standardinformation.h"
+#import "ALHTTPSessionManager.h"
 
 @implementation Standardinformation
 
@@ -72,14 +73,18 @@ static Standardinformation *__instance = nil;
 #pragma mark Public Method
 - (void)sendStandardInfomationRequest
 {
-    [_alt sendRequestForUserInfo:@{
-                                    @"task" : @"upload",    // @optional - data(default), upload, download // if (task == upload) { @required  'bodyData' or 'fileURL' }
-                                    @"url": @"",            // @required
-                                    @"httpMethod": @"POST", // @optional - if (task == upload) { httpMethod = POST }
-                                    @"type": @"JSON",       // @optional
-                                    @"param" : @{},         // @optional
-                                    @"customParam": @{}     // @optional
-                                  }];
+    ALHTTPSessionManager *httpManager = [[ALHTTPSessionManager alloc] initWithTarget:self selector:@selector(recieveSuccess:) configuration:nil];
+    
+    [httpManager GET:@"http://aiden.gonetis.com:8080/v1/standardinformation" parameters:nil];
+    
+//    [_alt sendRequestForUserInfo:@{
+//                                    @"task" : @"upload",    // @optional - data(default), upload, download // if (task == upload) { @required  'bodyData' or 'fileURL' }
+//                                    @"url": @"",            // @required
+//                                    @"httpMethod": @"POST", // @optional - if (task == upload) { httpMethod = POST }
+//                                    @"type": @"JSON",       // @optional
+//                                    @"param" : @{},         // @optional
+//                                    @"customParam": @{}     // @optional
+//                                  }];
 }
 
 - (void)standardInfomationInitialize:(information_receive_completion_handler)complateBlock

@@ -93,28 +93,27 @@ static ALNetManager *__instance = nil;
     if (!requestInfo) {
         return;
     }
+    NSURL *URL = requestInfo[@"url"];
+    if (!URL) {
+        return;
+    }
     
     // ALHTTPSessionManager 생성
     // SessionConfiguration은 ALConfiguration.h에서 조정
-    ALHTTPSessionManager *sessionManager = nil;
     
-    NSString *strTask = requestInfo[@"task"];
-    if ([strTask isEqualToString:@"DOWNLOAD"]) {
-        sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
-                                                             selector:@selector(didFinishConnectionWithResult:)
-                                                        configuration:[ALSessionConfiguration backgroundConfiguration]];
-    } else {
-        sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
-                                                             selector:@selector(didFinishConnectionWithResult:)
-                                                        configuration:[ALSessionConfiguration defaultConfiguration]];
+    NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
+    
+    if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
+        config = [ALSessionConfiguration defaultConfiguration];
     }
     
-    
+    ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
+                                                                               selector:@selector(didFinishConnectionWithResult:)
+                                                                          configuration:[ALSessionConfiguration backgroundConfiguration]];
     [sessionManager sendHTTPWithRequestInfo:requestInfo];
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
     
 }
 

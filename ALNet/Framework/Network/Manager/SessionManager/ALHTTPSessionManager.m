@@ -37,90 +37,83 @@
 {
     self.requestInfo = requestInfo;
     if (!self.requestInfo) {
-#warning error message (request Info missing) 추가하기
         return;
     }
     
-    NSURL *URL = requestInfo[@"url"];
-    if (!URL) {
-#warning error message (don`t have url argument) 추가하기
-        return;
+    NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URL:requestInfo[@"url"] parameters:requestInfo[@"param"]];
+    
+    NSString *strTask = requestInfo[@"task"];
+    if ([strTask isEqualToString:@"DATA"]) {
+        [self DataTaskWithRequest:request];
+    } else if ([strTask isEqualToString:@"UPLOAD"]) {
+        
+    } else if ([strTask isEqualToString:@"DOWNLOAD"]) {
+        
+    } else {
+        
     }
-    
-    NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URL:URL parameters:requestInfo[@"param"]];
-    
     
 }
 
-//// GET HTTPRequest
-//- (void)GET:(NSURL *)URL parameters:(NSDictionary *)parameters
-//{
-//    
-//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"GET" URLString:URLString parameters:parameters];
-//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        if (error) {
-//            
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [_target performSelectorOnMainThread:_selector withObject:[self.serialization objectForResponse:response data:data] waitUntilDone:NO];
-//        });
-//    }];
-//    [self addObserverForTask:task];
-//    [task resume];
-//}
-//
-//// POST HTTPRequest
-//- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters
-//{
-//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"POST" URLString:URLString parameters:parameters];
-//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        if (error) {
-//            
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [_target performSelectorOnMainThread:_selector withObject:[self.serialization objectForResponse:response data:data] waitUntilDone:NO];
-//        });
-//    }];
-//    [self addObserverForTask:task];
-//    [task resume];
-//}
-//
-//// PUT HTTPRequest
-//- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters
-//{
-//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"PUT" URLString:URLString parameters:parameters];
-//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        if (error) {
-//            
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [_target performSelectorOnMainThread:_selector withObject:[self.serialization objectForResponse:response data:data] waitUntilDone:NO];
-//        });
-//    }];
-//    [self addObserverForTask:task];
-//    [task resume];
-//}
-//
-//
-//
-//// DELETE HTTPRequest
-//- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters
-//{
-//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"DELETE" URLString:URLString parameters:parameters];
-//    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        if (error) {
-//            
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [_target performSelectorOnMainThread:_selector withObject:[self.serialization objectForResponse:response data:data] waitUntilDone:NO];
-//        });
-//    }];
-//    [self addObserverForTask:task];
-//    [task resume];
-//}
+- (void)DataTaskWithRequest:(NSURLRequest *)request
+{
+    __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            
+        }
+        id resultObject = [self.serialization objectForResponse:response data:data];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+        });
+    }];
+    [self addObserverForTask:task];
+    [task resume];
+}
+
+- (void)UploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData
+{
+    
+    __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromData:bodyData completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            
+        }
+        id resultObject = [self.serialization objectForResponse:response data:data];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+        });
+    }];
+    [self addObserverForTask:task];
+    [task resume];
+    
+}
+
+- (void)UploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL
+{
+    __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromFile:fileURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            
+        }
+        id resultObject = [self.serialization objectForResponse:response data:data];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+        });
+    }];
+    [self addObserverForTask:task];
+    [task resume];
+}
+
+- (void)DownloadTaskWithRequest:(NSURLRequest *)request
+{
+    
+}
+
+- (void)DownloadTaskWithResumeData:(NSData *)resumeData
+{
+    
+}
 
 
-
+// ALHTTPSession Standardalone Method
 - (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler
 {
     NSURL *URL = [NSURL URLWithString:URLString];

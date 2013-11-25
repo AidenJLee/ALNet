@@ -15,12 +15,7 @@
 @property (nonatomic, strong) ALSerialization *serialization;
 
 //ALNet에서 사용
-- (void)sendHTTPRequestForRequestInfo:(id)requestInfo;
-
-- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters;
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters;
-- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters;
-- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)sendHTTPWithRequestInfo:(id)requestInfo;
 
 // ALHTTPSessionManager - Standard alone용
 - (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler;

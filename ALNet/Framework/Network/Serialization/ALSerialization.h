@@ -15,8 +15,9 @@
 
 
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data;
+
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method
-                                 URLString:(NSString *)URLString
+                                       URL:(NSURL *)URL
                                 parameters:(NSDictionary *)parameters;
 
 #pragma mark -
@@ -27,8 +28,8 @@
 
 #pragma mark -
 #pragma mark JSON Generator Method
-+ (NSData *)JSONDataFromJSONObject:(id)object;
-+ (NSString *)JSONStringFromObject:(id)object;
++ (NSData *)dataFromJSONObject:(id)object;
++ (NSString *)stringFromObject:(id)object;
 
 + (BOOL)isValidJSONObject:(id)object;
 

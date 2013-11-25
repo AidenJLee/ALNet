@@ -29,15 +29,18 @@
 - (void)sendRequestForUserInfo:(id)userInfo
 {
     
-    NSString *strURL = userInfo[@"url"];
-    if (!strURL) {
+    NSURL *URL = [NSURL URLWithString:userInfo[@"url"]];
+    if (!URL) {
         return;
     }
     
+    // 정상으로 판단하고 Notification 센터에 옵저버를 등록한다
     [self addNotificationObserver];
+    
+    // userInfo를 기반으로 RequestInfo정보를 생성한다
     NSMutableDictionary *requestInfo = [[NSMutableDictionary alloc] initWithCapacity:10];
     
-    requestInfo[@"url"]         = strURL;
+    requestInfo[@"url"]         = URL;
     requestInfo[@"task"]        = userInfo[@"task"] ? [userInfo[@"task"] uppercaseString] : @"DATA";
     requestInfo[@"type"]        = userInfo[@"type"] ? [userInfo[@"type"] uppercaseString] : @"JSON";
     requestInfo[@"httpMethod"]  = userInfo[@"httpMethod"] ? [userInfo[@"httpMethod"] uppercaseString] : @"GET";
@@ -49,20 +52,12 @@
     if (param || [param isKindOfClass:[NSDictionary class]]) {
         requestInfo[@"param"] = param;
     } else {
-        NSLog(@"Parameter가 없거나 NSDictionary가 아닙니다");
-        requestInfo[@"param"] = @{};
+        requestInfo[@"param"] = @{};    // @"Parameter가 없거나 NSDictionary가 아닙니다"
     }
     if (customParam || [customParam isKindOfClass:[NSDictionary class]]) {
         requestInfo[@"customParam"] = customParam;
     } else {
-        NSLog(@"CustomParameter가 없거나 NSDictionary가 아닙니다");
-        requestInfo[@"customParam"] = @{};
-    }
-    
-    
-    // image타입이고 2번째 URL도 들어온 경우 (thumbnail url)
-    if ([requestInfo[@"type"] isEqualToString:@"IMAGE"] && userInfo[@"url2"]) {
-        requestInfo[@"url2"] = userInfo[@"url2"];
+        requestInfo[@"customParam"] = @{};  // @"CustomParameter가 없거나 NSDictionary가 아닙니다"
     }
     
     

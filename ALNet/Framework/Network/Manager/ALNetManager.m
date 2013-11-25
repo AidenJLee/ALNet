@@ -94,43 +94,26 @@ static ALNetManager *__instance = nil;
         return;
     }
     
-    // 상단 네트워크 인디케이터 켬
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    
-    // Configuration Custom 가능 - ALConfiguration.h에서
-    NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
+    // ALHTTPSessionManager 생성
+    // SessionConfiguration은 ALConfiguration.h에서 조정
+    ALHTTPSessionManager *sessionManager = nil;
     
     NSString *strTask = requestInfo[@"task"];
     if ([strTask isEqualToString:@"DOWNLOAD"]) {
-        config = [ALSessionConfiguration backgroundConfiguration];
-    } else if ([strTask isEqualToString:@"UPLOAD"]) {
-        // 딱히 설정 바꿔야 하는게 있다면.... 변경
-        // 하지만 아마 없을꺼야...
+        sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
+                                                             selector:@selector(didFinishConnectionWithResult:)
+                                                        configuration:[ALSessionConfiguration backgroundConfiguration]];
+    } else {
+        sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
+                                                             selector:@selector(didFinishConnectionWithResult:)
+                                                        configuration:[ALSessionConfiguration defaultConfiguration]];
     }
     
-    ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
-                                                                               selector:@selector(didFinishConnectionWithResult:)
-                                                                          configuration:config];
     
-    [sessionManager sendHTTPRequestForRequestInfo:requestInfo];
+    [sessionManager sendHTTPRequestWithRequestInfo:requestInfo];
     
-    
-    
-//    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
-//                                                                object:responseObject
-//                                                              userInfo:nil];
-//        });
-//    }];
-//    [sessionManager POST:strURL parameters:requestInfo[@"param"] completionHandler:^(NSURLSessionDataTask *task, id responseObject) {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:responseObject[@"notiIdentifier"]
-//                                                            object:responseObject
-//                                                          userInfo:nil];
-//    }];
-    
-    
+    // 상단 네트워크 인디케이터 켬
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     
 }

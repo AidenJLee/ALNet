@@ -3,15 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>url</key>
-	<string></string>
-	<key>url2</key>
-	<string></string>
+	<string>NSURL Class - !String</string>
 	<key>httpMethod</key>
-	<string>GET</string>
+	<string>GET, POST, PUT, DELETE</string>
 	<key>type</key>
-	<string>JSON</string>
+	<string>JSON, STRING, FILE, IMAGE</string>
 	<key>task</key>
-	<string>DATA</string>
+	<string>DATA, UPLOAD, DOWNLOAD</string>
 	<key>bodyData</key>
 	<data></data>
 	<key>fileURL</key>

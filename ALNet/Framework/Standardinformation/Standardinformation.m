@@ -75,7 +75,9 @@ static Standardinformation *__instance = nil;
 {
     ALHTTPSessionManager *httpManager = [[ALHTTPSessionManager alloc] initWithTarget:self selector:@selector(recieveSuccess:) configuration:nil];
     
-    [httpManager GET:@"http://aiden.gonetis.com:8080/v1/standardinformation" parameters:nil];
+    [httpManager GET:@"http://aiden.gonetis.com:8080/v1/standardinformation" parameters:nil completionHandler:^(id responseObject) {
+        
+    }];
     
 //    [_alt sendRequestForUserInfo:@{
 //                                    @"task" : @"upload",    // @optional - data(default), upload, download // if (task == upload) { @required  'bodyData' or 'fileURL' }

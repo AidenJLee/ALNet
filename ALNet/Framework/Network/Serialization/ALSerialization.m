@@ -39,7 +39,7 @@
     if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
         ![self.contentTypes containsObject:[res MIMEType]]) {  // ex) statusCode: 200 / MIMEType: text/plain
         
-        NSString *strDescription = [NSString stringWithFormat:@"Request failed: %@ (%d) / %@", [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode], res.statusCode, [response MIMEType]];
+        NSString *strDescription = [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@", [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode], (long)res.statusCode, [response MIMEType]];
         
         requestFailInfo = @{ @"description": strDescription };
         
@@ -70,7 +70,7 @@
 #pragma mark -
 #pragma mark - Request Serialization
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method
-                                 URLString:(NSString *)URLString
+                                       URL:(NSURL *)URL
                                 parameters:(NSDictionary *)parameters
 {
     
@@ -78,7 +78,7 @@
         parameters = @{};
     }
     NSParameterAssert(method);
-    NSParameterAssert(URLString);
+    NSParameterAssert(URL);
     NSParameterAssert(parameters);
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -108,7 +108,8 @@
         [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
         [request setTimeoutInterval:30.0];                              // 30초 타임아웃
         [request setHTTPMethod:method];
-        [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", URLString, strEncodeParam]]];
+        [request setURL:[NSURL URLWithString:strEncodeParam relativeToURL:URL]];
+        NSLog(@"URL Check : %@", [NSURL URLWithString:strEncodeParam relativeToURL:URL]);
         
     } else if ([method isEqualToString:@"POST"] ||
                [method isEqualToString:@"PUT"] ||
@@ -117,10 +118,10 @@
         [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
         [request setTimeoutInterval:30.0];                              // 30초 타임아웃
         [request setHTTPMethod:method];
-        [request setURL:[NSURL URLWithString:URLString]];
+        [request setURL:URL];
         
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//        NSData *jsonData = [self.class JSON]
+        //        NSData *jsonData = [self.class JSON]
         NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:dataParam];
         
@@ -225,7 +226,7 @@
  */
 + (NSString *)stringFromObject:(id)object
 {
-    NSData *data = [[self class] JSONDataFromJSONObject:object];
+    NSData *data = [[self class] dataFromJSONObject:object];
     NSString *JSONString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     return JSONString;
 }

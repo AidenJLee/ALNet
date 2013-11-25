@@ -97,9 +97,12 @@
         // 요청
         id <ALNetManagerProtocol> _networkManager = [ALNetManager sharedInstance];
         
-        NSMutableDictionary *requestInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
-        requestInfo[@"common"]      = @{ @"url" : URL, @"type" : @"image", @"httpMethod" : @"get" };
-        requestInfo[@"customParam"] = @{ @"imageView" : self };
+        NSDictionary *requestInfo = @{
+                                            @"url" : URL,
+                                            @"type" : @"image",
+                                            @"httpMethod" : @"get",
+                                            @"customParam" : @{ @"imageView" : self }
+                                       };
         
         [_networkManager requestWithRequestInfo:requestInfo];
         
@@ -159,9 +162,11 @@
     // original은 있는데 thumbnail이 없는 경우 thumbnail만 요청한다.
     if (!hasOriginalImageRequest && hasThumbnailImageRequest) {
         
-        NSMutableDictionary *requestInfo = nil;
-        requestInfo                 = [[NSMutableDictionary alloc] initWithCapacity:0];
-        requestInfo[@"common"]      = @{ @"url" : thumbnailURL, @"type" : @"image", @"httpMethod" : @"get" };
+        NSDictionary *requestInfo = @{
+                                             @"url" : thumbnailURL,
+                                             @"type" : @"image",
+                                             @"httpMethod" : @"get"
+                                        };
         
         [_networkManager requestWithRequestInfo:requestInfo];
         
@@ -175,21 +180,24 @@
         [_arrRequestURLQueue addObject:@{ @"url1" : originalURL, @"url2" : thumbnailURL }];
         
         // thumbnail 요청
-        NSMutableDictionary *requestInfo = nil;
+        NSDictionary *requestInfo1 = @{
+                                                @"url" : thumbnailURL,
+                                                @"type" : @"image",
+                                                @"httpMethod" : @"get",
+                                                @"customParam" : @{ @"imageView" : self }
+                                            };
         
-        requestInfo                 = [[NSMutableDictionary alloc] initWithCapacity:0];
-        requestInfo[@"common"]      = @{ @"url" : thumbnailURL, @"type" : @"image", @"httpMethod" : @"get" };
-        requestInfo[@"customParam"] = @{ @"imageView" : self };
-        
-        [_networkManager requestWithRequestInfo:requestInfo];
+        [_networkManager requestWithRequestInfo:requestInfo1];
         
         // original 요청
+        NSDictionary *requestInfo2 = @{
+                                        @"url" : originalURL,
+                                        @"type" : @"image",
+                                        @"httpMethod" : @"get",
+                                        @"customParam" : @{ @"imageView" : self }
+                                      };
         
-        requestInfo                 = [[NSMutableDictionary alloc] initWithCapacity:0];
-        requestInfo[@"common"]      = @{ @"url" : originalURL, @"type" : @"image", @"httpMethod" : @"get" };
-        requestInfo[@"customParam"] = @{ @"imageView" : self };
-        
-        [_networkManager requestWithRequestInfo:requestInfo];
+        [_networkManager requestWithRequestInfo:requestInfo2];
         
     } else if (hasOriginalImageRequest && !hasThumbnailImageRequest) {   // original만 없는 경우
         
@@ -197,14 +205,14 @@
         [_arrRequestURLQueue addObject:@{ @"url1" : originalURL, @"url2" : [NSURL URLWithString:@""] }];
         
         // original 요청
-        NSMutableDictionary *requestInfo = nil;
-        
-        requestInfo                 = [[NSMutableDictionary alloc] initWithCapacity:0];
-        requestInfo[@"common"]      = @{ @"url" : originalURL, @"type" : @"image", @"httpMethod" : @"get" };
-        requestInfo[@"customParam"] = @{ @"imageView" : self };
+        NSDictionary *requestInfo = @{
+                                        @"url" : originalURL,
+                                        @"type" : @"image",
+                                        @"httpMethod" : @"get",
+                                        @"customParam" : @{ @"imageView" : self }
+                                      };
         
         [_networkManager requestWithRequestInfo:requestInfo];
-        
         
     }
     

@@ -35,9 +35,9 @@
 #pragma mark - HTTP Public Method Implement
 - (void)sendHTTPRequestForRequestInfo:(id)requestInfo
 {
-    self.requestInfo = requestInfo;
-    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"GET" URLString:URLString parameters:parameters];
-    NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URLString:strURL parameters:requestInfo[@"param"]];
+//    self.requestInfo = requestInfo;
+//    NSMutableURLRequest *request = [self.serialization requestWithMethod:@"GET" URLString:URLString parameters:parameters];
+//    NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URLString:strURL parameters:requestInfo[@"param"]];
 }
 
 // GET HTTPRequest

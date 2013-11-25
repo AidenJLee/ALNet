@@ -8,6 +8,7 @@
 
 #import "ALMainViewController.h"
 #import "ALHTTPSessionManager.h"
+#import "ALStringConvertor.h"
 
 @interface ALMainViewController ()
 
@@ -29,6 +30,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    
+    ALHTTPSessionManager *sManger = [[ALHTTPSessionManager alloc] init];
+    [sManger GET:@"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/startround" parameters:nil completionHandler:^(id responseObject) {
+        NSLog(@" %@", responseObject);
+    }];
+    
+    [sManger POST:@"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/find" parameters:@{ @"_id": @"528d25bf8055296c3a000001" } completionHandler:^(id responseObject) {
+        NSLog(@" %@", responseObject);
+    }];
+    
 }
 
 - (void)receiveResult:(id)result
@@ -41,6 +54,7 @@
                                    @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/create",
                                    @"httpMethod" : @"post",
                                    @"type"       : @"json",
+                                   @"task:"      : @"upload",
                                    @"param"  : @{
                                            @"appid": @"asfdsfa",
                                            @"nickname": @"aidenjlee",

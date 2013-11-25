@@ -41,6 +41,7 @@ static void *ContextTaskState = &ContextTaskState;
         
         if (!configuration) {
             configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+            
         }
 		_target   = target;
 		_selector = selector;

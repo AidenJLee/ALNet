@@ -90,21 +90,12 @@ static ALNetManager *__instance = nil;
 - (void)requestWithRequestInfo:(id)requestInfo
 {
     
-    NSString *strURL = requestInfo[@"url2"];
-    
-    if (strURL == nil || [strURL isEqualToString:@""]) {
-        strURL = requestInfo[@"url"];
-    }
-    
-    if (strURL == nil || [strURL isEqualToString:@""]) {
+    if (!requestInfo) {
         return;
     }
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    
-    strURL = [strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     
     // Configuration Custom 가능 - ALConfiguration.h에서
@@ -121,6 +112,8 @@ static ALNetManager *__instance = nil;
     ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
                                                                           configuration:config];
+    
+    [sessionManager sendHTTPRequestForRequestInfo:requestInfo];
     
     
     
@@ -176,7 +169,7 @@ static ALNetManager *__instance = nil;
 {
     
     if([keyPath isEqualToString:OPERATION_QUEUE_STATUS]) {
-        NSLog(@"checking for operation Count : %d", [(NSOperationQueue *)object operationCount]);
+        NSLog(@"checking for operation Count : %lu", (unsigned long)[(NSOperationQueue *)object operationCount]);
         if ([(NSOperationQueue *)object operationCount] <= 0) {
             // 상단 네트워크 인디케이터 끔
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

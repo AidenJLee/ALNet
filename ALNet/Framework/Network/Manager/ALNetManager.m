@@ -104,14 +104,15 @@ static ALNetManager *__instance = nil;
     NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
     
     if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
-        config = [ALSessionConfiguration defaultConfiguration];
+        config = [ALSessionConfiguration backgroundConfiguration];
     }
     
     ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
-                                                                          configuration:[ALSessionConfiguration backgroundConfiguration]];
+                                                                          configuration:config];
     [sessionManager sendHTTPWithRequestInfo:requestInfo];
     
+    NSLog(@"ALHTTPSession Description : %@", [sessionManager description]);
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
@@ -135,7 +136,7 @@ static ALNetManager *__instance = nil;
         [imageView setImageForReceivedURL:result[@"url"]];
         
     } else  {
-        [[NSNotificationCenter defaultCenter] postNotificationName:result[@"notiIdentifier"]
+        [[NSNotificationCenter defaultCenter] postNotificationName:result[ALTRANSACTION_NOTIFICATION_IDENTIFIER]
                                                             object:result
                                                           userInfo:nil];
     }

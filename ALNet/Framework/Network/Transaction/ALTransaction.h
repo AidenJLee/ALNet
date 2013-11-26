@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALTransactionProtocol.h"
 
+#import "ALNetConst.h"
 #import "ALNetManager.h"
 #import "ALNetManagerProtocol.h"
+#import "ALTransactionProtocol.h"
 
 @interface ALTransaction : NSObject <ALTransactionProtocol>
 {

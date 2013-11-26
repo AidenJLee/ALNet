@@ -23,10 +23,16 @@
         NSLog(@"Error : %@" , [error userInfo]);
     }
     
+    self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:task.response data:self.mutableData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+    });
+
 //    if (self.progressAction){
 //        self.progressAction((double)task.countOfBytesReceived, (double)task.countOfBytesExpectedToReceive);
 //    }
-//    [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+    
+    [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
 }
 
 /* 업도르 종료 후 응답이 Redirection되는 경우 호출된다. */

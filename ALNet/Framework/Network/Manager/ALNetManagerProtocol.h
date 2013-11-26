@@ -11,7 +11,7 @@
 @protocol ALNetManagerProtocol <NSObject>
 
 @required
-/*! Transaction으로 부터 requsetInfo를 받아 작업을 분류하여 서버에 요청한다.
+/*! Transaction으로 부터 requsetInfo를 받아 작업을 분류하여 작업 오브젝트에 요청한다.
  *  \param requsetInfo 요청에 필요한 정보
  *  \return network manager가 정상적으로 요청을 받았는지 여부 (BOOL type)
  */

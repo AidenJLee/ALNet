@@ -10,6 +10,16 @@
 
 #define MAX_OPERATIONQUEUE_COUNT 5
 
+
+#pragma mark -
+#pragma mark Value Result Naming
+
+extern NSString * const ERROR_TITLE;
+extern NSString * const RESULT_TITLE;
+
+extern NSString * const ALTRANSACTION_NOTIFICATION_IDENTIFIER;
+
+
 #pragma mark -
 #pragma mark Session Configuration
 
@@ -18,11 +28,11 @@ extern NSString * const OPERATION_QUEUE_NAME;
 extern NSString * const OPERATION_QUEUE_STATUS;
 
 
-
 #pragma mark -
 #pragma mark Task Observing KeyPath
 
 extern NSString * const TASK_STATE_OBSERVING;
+
 
 #pragma mark -
 #pragma mark Notifications Identification

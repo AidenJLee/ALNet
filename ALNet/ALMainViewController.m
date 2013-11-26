@@ -30,26 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-//    ALHTTPSessionManager *httpManager = [[ALHTTPSessionManager alloc] initWithTarget:self selector:@selector(recieveSuccess:) configuration:nil];
-//    
-//    [httpManager GET:@"http://aiden.gonetis.com:8080/v1/standardinformation" parameters:nil];
-//    
-    ALHTTPSessionManager *sManger = [[ALHTTPSessionManager alloc] init];
-    [sManger GET:@"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/startround" parameters:nil completionHandler:^(id responseObject) {
-        NSLog(@" %@", responseObject);
-    }];
-    
-    [sManger POST:@"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/find" parameters:@{ @"_id": @"528d25bf8055296c3a000001" } completionHandler:^(id responseObject) {
-        NSLog(@" %@", responseObject);
-    }];
-    
-}
-
-- (void)receiveResult:(id)result
-{
-    NSLog(@"result : %@", result);
 }
 
 - (IBAction)sendPost:(id)sender {
@@ -57,7 +37,6 @@
                                    @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/create",
                                    @"httpMethod" : @"post",
                                    @"type"       : @"json",
-                                   @"task:"      : @"upload",
                                    @"param"  : @{
                                            @"appid": @"asfdsfa",
                                            @"nickname": @"aidenjlee",
@@ -75,7 +54,6 @@
     [_alt sendRequestForUserInfo:@{
                                    @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/find",
                                    @"httpMethod" : @"post",
-                                   @"type"       : @"json",
                                    @"param"  : @{ @"_id": @"528d25bf8055296c3a000001" }
                                    }];
 }
@@ -84,7 +62,6 @@
     [_alt sendRequestForUserInfo:@{
                                    @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/login",
                                    @"httpMethod" : @"post",
-                                   @"type"       : @"json",
                                    @"param"  : @{
                                                     @"appid": @"asfdsfa",
                                                     @"openidid": @"1412523515",
@@ -197,9 +174,6 @@
     NSDictionary *value = result;
     NSLog(@"recieveSuccess : %@", [NSString stringWithFormat:@"%@", value]);
     [_textView setText:[NSString stringWithFormat:@"%@", value]];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-    });
 }
 
 - (void)recieveFailure:(id)result

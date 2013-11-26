@@ -7,12 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALSerialization.h"
+
 #import "ALSessionManager.h"
 
 @interface ALHTTPSessionManager : ALSessionManager
-
-@property (nonatomic, strong) ALSerialization *serialization;
 
 //ALNet에서 사용
 - (void)sendHTTPWithRequestInfo:(id)requestInfo;

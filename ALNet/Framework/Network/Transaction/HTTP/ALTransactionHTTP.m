@@ -81,7 +81,7 @@
     }
     
     // 완료 된 오브젝트를 받을 노티피케이션 아이디 넣기
-    requestInfo[@"notiIdentifier"] = _observerKeys.lastObject;
+    requestInfo[ALTRANSACTION_NOTIFICATION_IDENTIFIER] = _observerKeys.lastObject;
     
 #ifdef DEBUG
     NSLog(@"----------------------");
@@ -107,15 +107,15 @@
 - (void)didFinishReceive:(NSNotification *)noti
 {
     
-    [self removeNotificationObserverForIdentifire:noti.object[@"notiIdentifier"]];
+    [self removeNotificationObserverForIdentifire:noti.object[ALTRANSACTION_NOTIFICATION_IDENTIFIER]];
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     
-    if (noti.object[@"value"]) {
-        [_target performSelector:_successSel withObject:noti.object[@"value"]];
+    if (noti.object[ERROR_TITLE]) {
+        [_target performSelector:_failureSel withObject:noti.object[ERROR_TITLE]];
     } else {
-        [_target performSelector:_failureSel withObject:noti.object];
+        [_target performSelector:_successSel withObject:noti.object[RESULT_TITLE]];
     }
     
 #pragma clang diagnostic pop

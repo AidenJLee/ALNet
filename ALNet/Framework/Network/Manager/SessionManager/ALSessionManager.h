@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ALNetConst.h"
+#import "ALSerialization.h"
 #import "ALSessionManagerProtocol.h"
 
 @interface ALSessionManager : NSObject <NSURLSessionDelegate, ALSessionManagerProtocol>
@@ -17,11 +18,13 @@
 }
 
 // ALSessionManager
-@property (readonly, strong, nonatomic) NSURLSession *session;
+@property (nonatomic, strong, readonly) NSURLSession *session;
 @property (nonatomic, strong) id requestInfo;   // 송신, 수신에 대한 정보
+@property (nonatomic, strong) ALSerialization *serialization;
 
 // ALSessionManager + TaskDelegate ()
-@property (copy, nonatomic) NSURL *downloadedFileURL;
+@property (nonatomic, copy) NSURL *downloadedFileURL;
+@property (nonatomic, strong) NSMutableData *mutableData;
 
 // Add NSKeyValueObserving For Task Method Implement
 - (void)addObserverForTask:(id)task;

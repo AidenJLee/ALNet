@@ -7,7 +7,6 @@
 //
 
 #import "ALSerialization.h"
-#import "ALNetConst.h"
 
 @implementation ALSerialization
 
@@ -32,8 +31,7 @@
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
-    NSDictionary *requestFailInfo = nil;
-    
+    NSMutableDictionary *errorInfo = nil;
     
     NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
     if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
@@ -41,7 +39,7 @@
         
         NSString *strDescription = [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@", [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode], (long)res.statusCode, [response MIMEType]];
         
-        requestFailInfo = @{ @"description": strDescription };
+        errorInfo[@"error"][@"RequestFailed"] = @{ @"description": strDescription };
         
     }
     
@@ -54,16 +52,15 @@
         // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
         id resultObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
         
-        if (error) {
-            resultObject[@"error"] = @{
-                                          @"errorCode": @3030,
-                                          @"description":[error description]
-                                        };
+        if (!error) {
+            return resultObject;
+        } else {
+            errorInfo[@"error"][@"SerializationFailed"] = @{ @"error": error, @"description": [error description] };
         }
-        return resultObject;
+        
     }
     
-    return nil;
+    return errorInfo;
 }
 
 

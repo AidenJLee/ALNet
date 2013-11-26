@@ -46,6 +46,7 @@ static void *ContextTaskState = &ContextTaskState;
 		_target   = target;
 		_selector = selector;
         _session  = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[ALNetManager sharedInstance].operationQueue];
+        _serialization = [[ALSerialization alloc] init];
         
 	}
 	return self;

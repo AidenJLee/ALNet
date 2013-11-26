@@ -200,10 +200,10 @@
 			children = (
 				0F6422F6183F329000BB5510 /* ALNetConst.h */,
 				0F6422F7183F329000BB5510 /* ALNetConst.m */,
+				0F642320183F329000BB5510 /* UserInfo.plist */,
 				0F6422F8183F329000BB5510 /* Manager */,
 				0F642312183F329000BB5510 /* Serialization */,
 				0F642316183F329000BB5510 /* Transaction */,
-				0F642320183F329000BB5510 /* UserInfo.plist */,
 			);
 			path = Network;
 			sourceTree = "<group>";

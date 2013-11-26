@@ -41,7 +41,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
     didReceiveData:(NSData *)data
 {
     NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
-//    [self.mutableData appendData:data];
+    [self.mutableData appendData:data];
 //    self.downloadProgress.totalUnitCount += [data length];
 }
 

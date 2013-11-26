@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ALNetConst.h"
 
 @interface ALSerialization : NSObject
 

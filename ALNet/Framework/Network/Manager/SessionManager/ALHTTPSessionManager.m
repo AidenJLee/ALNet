@@ -20,7 +20,7 @@
     
     self = [super initWithTarget:target selector:selector configuration:configuration];
     if (self) {
-        _serialization = [[ALSerialization alloc] init];
+        
 	}
 	return self;
     
@@ -35,10 +35,11 @@
 #pragma mark - HTTP Public Method Implement
 - (void)sendHTTPWithRequestInfo:(id)requestInfo
 {
-    self.requestInfo = requestInfo;
-    if (!self.requestInfo) {
+    
+    if (!requestInfo) {
         return;
     }
+    self.requestInfo = requestInfo;
     
     NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URL:requestInfo[@"url"] parameters:requestInfo[@"param"]];
     
@@ -51,29 +52,33 @@
             [self sendUploadTaskWithRequest:request fromData:requestInfo[@"bodyData"]];
         } else if (requestInfo[@"fileURL"]) {
             [self sendUploadTaskWithRequest:request fromFile:requestInfo[@"fileURL"]];
+        } else {
+            // TODO : Upload error
         }
         
     } else if ([strTask isEqualToString:@"DOWNLOAD"]) {
-        
+        [self sendDownloadTaskWithRequest:request];
     } else {
-        
+        NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
     }
     
 }
 
 - (void)sendDataTaskWithRequest:(NSURLRequest *)request
 {
+    
     __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
-            
+            NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        id resultObject = [self.serialization objectForResponse:response data:data];
+        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+            [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
     }];
     [self addObserverForTask:task];
     [task resume];
+    
 }
 
 - (void)sendUploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData
@@ -81,11 +86,11 @@
     
     __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromData:bodyData completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
-            
+            NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        id resultObject = [self.serialization objectForResponse:response data:data];
+        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+            [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
     }];
     [self addObserverForTask:task];
@@ -95,33 +100,58 @@
 
 - (void)sendUploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL
 {
+    
     __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromFile:fileURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
-            
+            NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        id resultObject = [self.serialization objectForResponse:response data:data];
+        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_target performSelectorOnMainThread:_selector withObject:resultObject waitUntilDone:NO];
+            [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+        });
+    }];
+    [self addObserverForTask:task];
+    [task resume];
+    
+}
+
+- (void)sendDownloadTaskWithRequest:(NSURLRequest *)request
+{
+    
+    __block NSURLSessionDownloadTask *task = [self.session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
+        }
+        self.requestInfo[RESULT_TITLE] = @{ @"location": location, @"response": response };
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
+        });
+    }];
+    [self addObserverForTask:task];
+    [task resume];
+    
+}
+
+- (void)sendDownloadTaskWithResumeData:(NSData *)resumeData
+{
+    __block NSURLSessionDownloadTask *task = [self.session downloadTaskWithResumeData:resumeData completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
+        }
+        self.requestInfo[RESULT_TITLE] = @{ @"location": location, @"response": response };
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
     }];
     [self addObserverForTask:task];
     [task resume];
 }
 
-- (void)sendDownloadTaskWithRequest:(NSURLRequest *)request
-{
-    
-}
-
-- (void)DownloadTaskWithResumeData:(NSData *)resumeData
-{
-    
-}
-
 
 // ALHTTPSession Standardalone Method
 - (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler
 {
+    
     NSURL *URL = [NSURL URLWithString:URLString];
     if (!URL) {
         return;
@@ -129,7 +159,7 @@
     NSMutableURLRequest *request = [self.serialization requestWithMethod:@"GET" URL:URL parameters:parameters];
     __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
-            
+            NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
         }
         if (completionHandler) {
             NSError *error = nil;
@@ -172,6 +202,7 @@
 
 - (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler
 {
+    
     NSURL *URL = [NSURL URLWithString:URLString];
     if (!URL) {
         return;
@@ -195,6 +226,7 @@
 
 - (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completionHandler:(void (^)(id responseObject))completionHandler
 {
+    
     NSURL *URL = [NSURL URLWithString:URLString];
     if (!URL) {
         return;

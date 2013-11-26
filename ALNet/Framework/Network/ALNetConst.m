@@ -10,6 +10,16 @@
 
 
 #pragma mark -
+#pragma mark Value Result Naming
+
+
+NSString * const ERROR_TITLE  = @"Error";
+NSString * const RESULT_TITLE = @"Results";
+
+NSString * const ALTRANSACTION_NOTIFICATION_IDENTIFIER = @"TransactionNotificationIdentifier";
+
+
+#pragma mark -
 #pragma mark - Session Configuration
 
 NSString * const SESSION_DOWNLOAD_ID  = @"com.entist.ALNet.downloadSession";

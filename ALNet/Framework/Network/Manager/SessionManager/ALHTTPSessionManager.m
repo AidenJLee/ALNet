@@ -44,8 +44,14 @@
     
     NSString *strTask = requestInfo[@"task"];
     if ([strTask isEqualToString:@"DATA"]) {
-        [self DataTaskWithRequest:request];
+        [self sendDataTaskWithRequest:request];
     } else if ([strTask isEqualToString:@"UPLOAD"]) {
+        
+        if (requestInfo[@"bodyData"]) {
+            [self sendUploadTaskWithRequest:request fromData:requestInfo[@"bodyData"]];
+        } else if (requestInfo[@"fileURL"]) {
+            [self sendUploadTaskWithRequest:request fromFile:requestInfo[@"fileURL"]];
+        }
         
     } else if ([strTask isEqualToString:@"DOWNLOAD"]) {
         
@@ -55,7 +61,7 @@
     
 }
 
-- (void)DataTaskWithRequest:(NSURLRequest *)request
+- (void)sendDataTaskWithRequest:(NSURLRequest *)request
 {
     __block NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
@@ -70,7 +76,7 @@
     [task resume];
 }
 
-- (void)UploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData
+- (void)sendUploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData
 {
     
     __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromData:bodyData completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -87,7 +93,7 @@
     
 }
 
-- (void)UploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL
+- (void)sendUploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL
 {
     __block NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request fromFile:fileURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
@@ -102,7 +108,7 @@
     [task resume];
 }
 
-- (void)DownloadTaskWithRequest:(NSURLRequest *)request
+- (void)sendDownloadTaskWithRequest:(NSURLRequest *)request
 {
     
 }

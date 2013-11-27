@@ -7,7 +7,7 @@
 //
 
 #import "ALNetManager.h"
-#import "ALHTTPSessionManager.h"
+#import "ALHTTPSession.h"
 #import "ALSessionConfiguration.h"
 #import "UIAsyncImageView.h"
 
@@ -101,15 +101,15 @@ static ALNetManager *__instance = nil;
     }
     
     // ALHTTPSessionManager 생성
-    ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
+    ALHTTPSession *httpSession = [[ALHTTPSession alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
                                                                           configuration:config];
-    [sessionManager sendHTTPWithRequestInfo:requestInfo];
+    [httpSession sendHTTPWithRequestInfo:requestInfo];
     
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:QueueContext];
+    [httpSession.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:QueueContext];
     
 }
 

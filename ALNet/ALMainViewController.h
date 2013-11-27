@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ALTransactionHTTP.h"
+#import "ALTransaction.h"
 
 @interface ALMainViewController : UIViewController
 {
-    ALTransactionHTTP *_alt;
+    ALTransaction *_alt;
 }
 
 @property (strong, nonatomic) NSString *URLString;

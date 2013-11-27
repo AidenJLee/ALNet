@@ -7,7 +7,6 @@
 //
 
 #import "Standardinformation.h"
-#import "ALHTTPSessionManager.h"
 
 @implementation Standardinformation
 

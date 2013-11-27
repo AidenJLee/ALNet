@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ALNetConst.h"
 #import "ALNetManager.h"
 #import "ALNetManagerProtocol.h"
 #import "ALTransactionProtocol.h"

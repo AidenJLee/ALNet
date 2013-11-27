@@ -174,60 +174,61 @@
     
 }
 
-- (void)amszonS3Upload
-{
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    NSString *contentMd5  = [request valueForHTTPHeaderField:@"Content-MD5"];
-    NSString *contentType = [request valueForHTTPHeaderField:@"Content-Type"];
-    NSString *timestamp   = [request valueForHTTPHeaderField:@"Date"];
-    
-    if (nil == contentMd5)  contentMd5  = @"";
-    if (nil == contentType) contentType = @"";
-    
-    NSMutableString *canonicalizedAmzHeaders = [NSMutableString string];
-    
-    NSArray *sortedHeaders = [[[request allHTTPHeaderFields] allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    
-    for (id key in sortedHeaders)
-    {
-        NSString *keyName = [(NSString *)key lowercaseString];
-        if ([keyName hasPrefix:@"x-amz-"]){
-            [canonicalizedAmzHeaders appendFormat:@"%@:%@\n", keyName, [request valueForHTTPHeaderField:(NSString *)key]];
-        }
-    }
-    
-    NSString *bucket = @"";
-    NSString *path   = request.URL.path;
-    NSString *query  = request.URL.query;
-    
-    NSString *host  = [request valueForHTTPHeaderField:@"Host"];
-    
-    if (![host isEqualToString:@"s3.amazonaws.com"]) {
-        bucket = [host substringToIndex:[host rangeOfString:@".s3.amazonaws.com"].location];
-    }
-    
-    NSString* canonicalizedResource;
-    
-    if (nil == path || path.length < 1) {
-        if ( nil == bucket || bucket.length < 1 ) {
-            canonicalizedResource = @"/";
-        }
-        else {
-            canonicalizedResource = [NSString stringWithFormat:@"/%@/", bucket];
-        }
-        
-    }
-    else {
-        canonicalizedResource = [NSString stringWithFormat:@"/%@%@", bucket, path];
-    }
-    
-    if (query != nil && [query length] > 0) {
-        canonicalizedResource = [canonicalizedResource stringByAppendingFormat:@"?%@", query];
-    }
-    
-    NSString* stringToSign = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", [request HTTPMethod], contentMd5, contentType, timestamp, canonicalizedAmzHeaders, canonicalizedResource];
-    
+//
+//- (void)amszonS3Upload
+//{
+//    
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    NSString *contentMd5  = [request valueForHTTPHeaderField:@"Content-MD5"];
+//    NSString *contentType = [request valueForHTTPHeaderField:@"Content-Type"];
+//    NSString *timestamp   = [request valueForHTTPHeaderField:@"Date"];
+//    
+//    if (nil == contentMd5)  contentMd5  = @"";
+//    if (nil == contentType) contentType = @"";
+//    
+//    NSMutableString *canonicalizedAmzHeaders = [NSMutableString string];
+//    
+//    NSArray *sortedHeaders = [[[request allHTTPHeaderFields] allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+//    
+//    for (id key in sortedHeaders)
+//    {
+//        NSString *keyName = [(NSString *)key lowercaseString];
+//        if ([keyName hasPrefix:@"x-amz-"]){
+//            [canonicalizedAmzHeaders appendFormat:@"%@:%@\n", keyName, [request valueForHTTPHeaderField:(NSString *)key]];
+//        }
+//    }
+//    
+//    NSString *bucket = @"";
+//    NSString *path   = request.URL.path;
+//    NSString *query  = request.URL.query;
+//    
+//    NSString *host  = [request valueForHTTPHeaderField:@"Host"];
+//    
+//    if (![host isEqualToString:@"s3.amazonaws.com"]) {
+//        bucket = [host substringToIndex:[host rangeOfString:@".s3.amazonaws.com"].location];
+//    }
+//    
+//    NSString* canonicalizedResource;
+//    
+//    if (nil == path || path.length < 1) {
+//        if ( nil == bucket || bucket.length < 1 ) {
+//            canonicalizedResource = @"/";
+//        }
+//        else {
+//            canonicalizedResource = [NSString stringWithFormat:@"/%@/", bucket];
+//        }
+//        
+//    }
+//    else {
+//        canonicalizedResource = [NSString stringWithFormat:@"/%@%@", bucket, path];
+//    }
+//    
+//    if (query != nil && [query length] > 0) {
+//        canonicalizedResource = [canonicalizedResource stringByAppendingFormat:@"?%@", query];
+//    }
+//    
+//    NSString* stringToSign = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", [request HTTPMethod], contentMd5, contentType, timestamp, canonicalizedAmzHeaders, canonicalizedResource];
+//    
 //    NSString *signature = [self signatureForString:stringToSign];
 //    
 //    [request setValue:[NSString stringWithFormat:@"AWS %@:%@", self.S3AccessKey, signature] forHTTPHeaderField:@"Authorization"];

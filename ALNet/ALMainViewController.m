@@ -7,8 +7,6 @@
 //
 
 #import "ALMainViewController.h"
-#import "ALHTTPSessionManager.h"
-#import "ALStringConvertor.h"
 
 @interface ALMainViewController ()
 
@@ -20,7 +18,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _alt = [[ALTransactionHTTP alloc] initWithTarget:self
+        _alt = [[ALTransaction alloc] initWithTarget:self
                                      successSelector:@selector(recieveSuccess:)
                                      failureSelector:@selector(recieveFailure:)];
     }

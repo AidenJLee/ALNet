@@ -1,14 +1,14 @@
 //
-//  ALHTTPSessionManager.m
+//  ALHTTPSession.m
 //  ALNet
 //
-//  Created by HoJun Lee on 2013. 11. 19..
+//  Created by HoJun Lee on 2013. 11. 28..
 //  Copyright (c) 2013년 HoJun Lee. All rights reserved.
 //
 
-#import "ALHTTPSessionManager.h"
+#import "ALHTTPSession.h"
 
-@implementation ALHTTPSessionManager
+@implementation ALHTTPSession
 
 
 #pragma mark -
@@ -20,7 +20,7 @@
     
     self = [super initWithTarget:target selector:selector configuration:configuration];
     if (self) {
-        
+        _serialization = [[ALSerialization alloc] init];
 	}
 	return self;
     

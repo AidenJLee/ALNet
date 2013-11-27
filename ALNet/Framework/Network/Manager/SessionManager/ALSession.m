@@ -1,29 +1,24 @@
 //
-//  ALSessionManager.m
+//  ALSession.m
 //  ALNet
 //
-//  Created by HoJun Lee on 2013. 11. 18..
+//  Created by HoJun Lee on 2013. 11. 27..
 //  Copyright (c) 2013년 HoJun Lee. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "ALSession.h"
 
-#import "ALNetManager.h"
-#import "ALSessionManager.h"
-#import "ALSessionManager+TaskDelegate.h"
-#import "ALSessionManager+DataTaskDelegate.h"
-#import "ALSessionManager+DownloadTaskDelegate.h"
+#import "AppDelegate.h"
 
 static void *ContextTaskState = &ContextTaskState;
 
-@interface ALSessionManager ()
+@interface ALSession ()
 
 @property (nonatomic, strong, readwrite) NSURLSession *session;
 
 @end
 
-
-@implementation ALSessionManager
+@implementation ALSession
 
 
 #pragma mark -
@@ -44,7 +39,6 @@ static void *ContextTaskState = &ContextTaskState;
 		_target   = target;
 		_selector = selector;
         _session  = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[ALNetManager sharedInstance].operationQueue];
-        _serialization = [[ALSerialization alloc] init];
         
 	}
 	return self;
@@ -64,40 +58,14 @@ static void *ContextTaskState = &ContextTaskState;
     [self.session finishTasksAndInvalidate];
 }
 
-- (NSArray *)getTasksWithTaskType:(NSString *)taskType
-{
-    
-    __block NSArray *tasks = nil;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
-        if ([taskType isEqualToString:@"dataTasks"]) {
-            tasks = dataTasks;
-        } else if ([taskType isEqualToString:@"uploadTasks"]) {
-            tasks = uploadTasks;
-        } else if ([taskType isEqualToString:@"downloadTasks"]) {
-            tasks = downloadTasks;
-        } else if ([taskType isEqualToString:@"tasks"]) {
-            tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@"@unionOfArrays.self"];
-        }
-        
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    return tasks;
-    
-}
 
-// NSKeyValueObserving For Task Method Implement
+#pragma mark -
+#pragma mark - NSKeyValueObserving For Task Method Implement
 - (void)addObserverForTask:(id)task
 {
     [task addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:ContextTaskState];
 }
 
-#pragma mark -
-#pragma mark - NSKeyValueObserving
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -130,7 +98,7 @@ static void *ContextTaskState = &ContextTaskState;
         
         if (notificationName) {
             dispatch_async(dispatch_get_main_queue(), ^{
-//                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:object];
+                //                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:object];
             });
         }
         
@@ -170,6 +138,5 @@ static void *ContextTaskState = &ContextTaskState;
 {
     NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
 }
-
 
 @end

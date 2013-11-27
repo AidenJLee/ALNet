@@ -1,14 +1,15 @@
 //
-//  ALSessionManagerProtocol.h
+//  ALSessionProtocol.h
 //  ALNet
 //
-//  Created by HoJun Lee on 2013. 11. 22..
+//  Created by HoJun Lee on 2013. 11. 27..
 //  Copyright (c) 2013년 HoJun Lee. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "ALNetConst.h"
 
-@protocol ALSessionManagerProtocol <NSObject>
+@protocol ALSessionProtocol <NSObject>
 
 @required
 /*! Session을 생성하고 요청에 대한 결과를 반환할 Target과 seletor 정보를 가지고 있는다

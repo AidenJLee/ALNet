@@ -74,16 +74,8 @@ static Standardinformation *__instance = nil;
 - (void)sendStandardInfomationRequest
 {
 
-    [_alt sendRequestForUserInfo:@{ @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation" }];
-    
-//    [_alt sendRequestForUserInfo:@{
-//                                    @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation",            // @required
-//                                    @"task" : @"upload",    // @optional - data(default), upload, download // if (task == upload) { @required  'bodyData' or 'fileURL' }
-//                                    @"httpMethod": @"POST", // @optional - if (task == upload) { httpMethod = POST }
-//                                    @"type": @"JSON",       // @optional
-//                                    @"param" : @{},         // @optional
-//                                    @"customParam": @{}     // @optional
-//                                  }];
+    [_alt sendRequestForUserInfo:@{ @"url": @"" }];
+
 }
 
 - (void)standardInfomationInitialize:(information_receive_completion_handler)complateBlock

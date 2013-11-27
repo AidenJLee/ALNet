@@ -85,15 +85,15 @@
 
 - (NSString *)observerKey
 {
-    return [[self uuid] stringByAppendingString:[NSString stringWithFormat:@"%lf", [NSDate timeIntervalSinceReferenceDate]]];
+    return [NSString stringWithFormat:@"%lf", [NSDate timeIntervalSinceReferenceDate]];
 }
 
-- (NSString *)uuid
-{
-    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-    CFRelease(uuidRef);
-    return (__bridge NSString *)uuidStringRef;
-}
+//- (NSString *)uuid
+//{
+//    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+//    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+//    CFRelease(uuidRef);
+//    return (__bridge NSString *)uuidStringRef;
+//}
 
 @end

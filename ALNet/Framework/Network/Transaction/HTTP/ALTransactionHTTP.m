@@ -66,7 +66,7 @@
     // 전송 방식이 Uplode일 때 fileURL이나 bodyData 값이 있어야 한다.
     if ([requestInfo[@"task"] isEqualToString:@"UPLOAD"]) {
         
-        requestInfo[@"httpMethod"] = @"POST";
+        requestInfo[@"httpMethod"] = @"multipart/form-data";
         
         // bodyData가 있냐?
         if (userInfo[@"bodyData"]) {

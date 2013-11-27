@@ -36,9 +36,6 @@
 - (void)sendHTTPWithRequestInfo:(id)requestInfo
 {
     
-    if (!requestInfo) {
-        return;
-    }
     self.requestInfo = requestInfo;
     
     NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URL:requestInfo[@"url"] parameters:requestInfo[@"param"]];
@@ -71,7 +68,8 @@
         if (error) {
             NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
+        // 데이터 확인 및 Serialization
+        [self spliteReceiveDataForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
@@ -88,7 +86,8 @@
         if (error) {
             NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
+        // 데이터 확인 및 Serialization
+        [self spliteReceiveDataForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
@@ -105,7 +104,7 @@
         if (error) {
             NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
-        self.requestInfo[RESULT_TITLE] = [self.serialization objectForResponse:response data:data];
+        [self spliteReceiveDataForResponse:response data:data];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
         });
@@ -122,6 +121,7 @@
         if (error) {
             NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
+        // TODO : download에 대한 예외 처리 필요
         self.requestInfo[RESULT_TITLE] = @{ @"location": location, @"response": response };
         dispatch_async(dispatch_get_main_queue(), ^{
             [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
@@ -138,6 +138,7 @@
         if (error) {
             NSLog(@"Error : %@Function : %s  Source Line : %d" , [error description], __FUNCTION__, __LINE__);
         }
+        // TODO : download resume에 대한 예외 처리 필요
         self.requestInfo[RESULT_TITLE] = @{ @"location": location, @"response": response };
         dispatch_async(dispatch_get_main_queue(), ^{
             [_target performSelectorOnMainThread:_selector withObject:self.requestInfo waitUntilDone:NO];
@@ -145,6 +146,21 @@
     }];
     [self addObserverForTask:task];
     [task resume];
+}
+
+
+#pragma mark -
+#pragma mark - Receive confirm Method Implement
+- (void)spliteReceiveDataForResponse:(NSURLResponse *)response data:(NSData *)data
+{
+    
+    id result = [self.serialization objectForResponse:response data:data];
+    if (!result[ERROR_TITLE]) {
+        self.requestInfo[RESULT_TITLE] = result;
+    } else {
+        self.requestInfo[ERROR_TITLE] = result;
+    }
+    
 }
 
 @end

@@ -21,60 +21,52 @@
 }
 
 // Check response - Status Code & MINE Type (@"application/json", @"text/json", @"text/plain")
-- (BOOL)validateResponse:(NSHTTPURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing *)error
+- (NSDictionary *)validateResponse:(NSHTTPURLResponse *)response data:(NSData *)data
 {
     
-    NSDictionary *errorInfo = nil;
+    NSString *errorDescription = nil;
     
     NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
     // 상태 코드가 정상 범위 내에 있고
     if ([self.statusCodes containsIndex:(NSUInteger)res.statusCode]) {
         
         NSString *mineType = [res MIMEType];
-        if ([mineType isEqualToString:@"text/plain"] ||
-            [mineType isEqualToString:@"text/json"] ||
+        if ([mineType isEqualToString:@"text/plain"]) {
+            // MINE Type이 파싱 가능한 오브젝트면 YES (Node.JS Buffer Type으로 반환하면 plain으로 반환 됨)
+            return nil;
+        }
+        if ([mineType isEqualToString:@"text/json"] ||
             [mineType isEqualToString:@"application/json"]) {
             
             // MINE Type이 파싱 가능한 오브젝트면 YES
-            return YES;
+            return nil;
         
-        } else if ([mineType isEqualToString:@"text/html"]) {
+        } else if ([mineType isEqualToString:@"text/html"]) {   // 에러 페이지가 오면?
             
-            if (error) {
-                errorInfo = @{
-                              @"RequestFailed": @{
-                                      @"description": [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@",
-                                                       [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
-                                                       (long)res.statusCode,
-                                                       [response MIMEType]]
-                                      }
-                              };
-                
-                
-            }
+            errorDescription = [NSString stringWithFormat:@"%ld %@ - %@",
+                                (long)res.statusCode,
+                                [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
+                                [response MIMEType]];
             
         }
         
     } else {
         
-        errorInfo = @{
-                      @"RequestFailed": @{
-                              @"description": [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@",
-                                               [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
-                                               (long)res.statusCode,
-                                               [response MIMEType]]
-                              }
-                      };
+        errorDescription = [NSString stringWithFormat:@"%ld %@ - %@",
+                            (long)res.statusCode,
+                            [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
+                            [response MIMEType]];
         
     }
     
-    if (error) {
-        *error = [[NSError alloc] initWithDomain:NETWORKING_ERROR_DOMAIN
-                                            code:NSURLErrorBadServerResponse
-                                        userInfo:errorInfo];
-    }
-    
-    return NO;
+    return @{
+             ERROR_TITLE : @"RequestFailed",
+             @"description": [NSString stringWithFormat:@"%ld %@ - %@",
+                              (long)res.statusCode,
+                              [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
+                              [response MIMEType]],
+             @"Data": data
+             };
     
 }
 #pragma mark -
@@ -87,9 +79,8 @@
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
-    NSError *error = nil;
-    NSDictionary *errorInfo = nil;
-    if ([self validateResponse:(NSHTTPURLResponse *)response data:data error:&error]) {
+    NSDictionary *errorInfo = [self validateResponse:(NSHTTPURLResponse *)response data:data];
+    if (!errorInfo) {
         
         NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
@@ -99,11 +90,24 @@
             // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
             id resultObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&serializationError];
             
-            if (!serializationError) {
+            if (serializationError) {
+                errorInfo = @{
+                              ERROR_TITLE : @"SerializationFailed",
+                              @"description": [serializationError description],
+                              @"Data": data
+                              };
+            }
+            
+            if (resultObject) {
                 return resultObject;
             } else {
-                errorInfo[ERROR_TITLE][@"SerializationFailed"] = @{ @"error": serializationError, @"description": [serializationError description] };
+                errorInfo = @{ERROR_TITLE : @"SerializationFailed",
+                              @"description": @"serialization data is nil" };
             }
+            
+        } else {
+            errorInfo = @{ERROR_TITLE : @"SerializationFailed",
+                          @"description": @"receive data is nil" };
         }
         
     }
@@ -119,11 +123,12 @@
                                 parameters:(NSDictionary *)parameters
 {
     
+    NSParameterAssert(method);
+    NSParameterAssert(URL);
+    
     if (!parameters) {
         parameters = @{};
     }
-    NSParameterAssert(method);
-    NSParameterAssert(URL);
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
@@ -149,8 +154,6 @@
         
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         
-        [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
-        [request setTimeoutInterval:30.0];                              // 30초 타임아웃
         [request setHTTPMethod:method];
         [request setURL:[NSURL URLWithString:strEncodeParam relativeToURL:URL]];
         NSLog(@"URL Check : %@", [NSURL URLWithString:strEncodeParam relativeToURL:URL]);
@@ -159,13 +162,10 @@
                [method isEqualToString:@"PUT"] ||
                [method isEqualToString:@"DELETE"]) {
         
-        [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];   // 캐쉬 사용 안함
-        [request setTimeoutInterval:30.0];                              // 30초 타임아웃
         [request setHTTPMethod:method];
         [request setURL:URL];
         
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        //        NSData *jsonData = [self.class JSON]
         NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:dataParam];
         

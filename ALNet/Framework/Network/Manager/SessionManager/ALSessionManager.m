@@ -96,6 +96,50 @@ static void *ContextTaskState = &ContextTaskState;
     [task addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:ContextTaskState];
 }
 
+#pragma mark -
+#pragma mark - NSKeyValueObserving
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    NSLog(@"keyPath : %@ " , keyPath);
+    // TODO: TaskDelegate에서 세부 구현이 필요합니다.  - Task NSKeyValueObserving으로 관찰중인 값 컨트롤
+    if (context == ContextTaskState && [keyPath isEqualToString:OBSERVE_STATE]) {
+        
+        NSLog(@"Task : %d " , [(NSURLSessionTask *)object state]);
+        NSString *notificationName = nil;
+        switch ([(NSURLSessionTask *)object state]) {
+                
+            case NSURLSessionTaskStateRunning:
+                notificationName = TASK_DID_START_NOTI;
+                break;
+                
+            case NSURLSessionTaskStateSuspended:
+                notificationName = TASK_DID_SUSPEND_NOTI;
+                break;
+                
+            case NSURLSessionTaskStateCompleted:
+                [object removeObserver:self forKeyPath:OBSERVE_STATE context:ContextTaskState];
+                break;
+                
+            default:
+                break;
+                
+        }
+        
+        if (notificationName) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:object];
+            });
+        }
+        
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+    
+}
+
 
 #pragma mark -
 #pragma mark - NSURLSessionDelegate

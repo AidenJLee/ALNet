@@ -11,6 +11,9 @@
 #import "ALSessionConfiguration.h"
 #import "UIAsyncImageView.h"
 
+
+static void *QueueContext = &QueueContext;
+
 @implementation ALNetManager
 
 
@@ -74,7 +77,6 @@ static ALNetManager *__instance = nil;
             _sharedQueue = [[NSOperationQueue alloc] init];
             _sharedQueue.name = OPERATIONQUEUE_NAME;
             _sharedQueue.maxConcurrentOperationCount = MAX_OPERATIONQUEUE_COUNT;
-            
         });
         
     }
@@ -90,15 +92,6 @@ static ALNetManager *__instance = nil;
 
 - (void)requestWithRequestInfo:(id)requestInfo
 {
-    
-    if (!requestInfo) {
-        return;
-    }
-    NSURL *URL = requestInfo[@"url"];
-    if (!URL) {
-        return;
-    }
-    
     
     // Task에 따른 SessionConfiguration생성 - ALConfiguration.h에서 조정
     NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
@@ -116,7 +109,7 @@ static ALNetManager *__instance = nil;
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:QueueContext];
     
 }
 

@@ -30,137 +30,60 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.URLString = @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080"; // Typing you URL
 }
 
-- (IBAction)sendPost:(id)sender {
+- (IBAction)sendSimpleDataTask:(id)sender {
+    [_alt sendRequestForUserInfo:@{ @"url": [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/standardinformation"] }];
+}
+
+- (IBAction)sendDataTaskForGET:(id)sender {
+    [_alt sendRequestForUserInfo:@{ @"url": [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/standardinformation"] }];
+}
+
+- (IBAction)sendDataTaskForPost:(id)sender {
     [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/create",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"nickname": @"aidenjlee",
-                                           @"password": @"entist",
-                                           @"openidname": @"gamecenter",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK",
-                                           @"country": @"ko_kr",
-                                           @"locale": @"seoul_korea"
-                                           }
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/find"],
+                                        @"httpMethod" : @"post",
+                                        @"param"      : @{ @"_id": @"528d25bf8055296c3a000001" }
                                    }];
 }
 
-- (IBAction)sendPostForFind:(id)sender {
+- (IBAction)sendDataTaskForPUT:(id)sender {
     [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/find",
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528d25bf8055296c3a000001"],
+                                        @"httpMethod" : @"put",
+                                        @"param"  : @{ @"nickname": @"aidenjlee" }
+                                   }];
+}
+
+- (IBAction)sendDataTaskForDELETE:(id)sender {
+    [_alt sendRequestForUserInfo:@{
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528d25bf8055296c3a000001"],
+                                        @"httpMethod" : @"delete"
+                                   }];
+}
+
+- (IBAction)sendUploadTask:(id)sender {
+    // bodyData
+    [_alt sendRequestForUserInfo:@{
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/picture/something"],
+                                        @"httpMethod" : @"post",
+                                        @"bodyData"  : [[NSMutableData alloc] initWithLength:1000000] // 1e6
+                                   }];
+    
+    // fileURL
+    [_alt sendRequestForUserInfo:@{
+                                   @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/picture/something"],
                                    @"httpMethod" : @"post",
                                    @"param"  : @{ @"_id": @"528d25bf8055296c3a000001" }
                                    }];
+    
 }
 
-- (IBAction)sendPostForLogin:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/users/login",
-                                   @"httpMethod" : @"post",
-                                   @"param"  : @{
-                                                    @"appid": @"asfdsfa",
-                                                    @"openidid": @"1412523515",
-                                                    @"openidtype": @"FACEBOOK"
-                                                  }
-                                   }];
+- (IBAction)sendDownloadTask:(id)sender {
+    [_alt sendRequestForUserInfo:@{ @"url": [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/picture/something"] }];
 }
-
-- (IBAction)sendPostForMakeGame:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/makegame",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"creatorid": @"528d25bf8055296c3a000001",
-                                           @"opponentid": @"528d26c9453b5e973a000001",
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForStartGame:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/startgame",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"gameid": @"528d9f8801eaf03c3d000001",
-                                           @"opponentid": @"528d25bf8055296c3a000001"
-                                           // 게임 시작이니까 게임 만든 사람 아이디 ( 이정보는 노티로 전송 됨 )
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForCompleteTurn:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/completeturn",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK"
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForCompleteRound:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/completeround",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK"
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForStartRound:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/startround",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK"
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForCompleteGame:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/completegame",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK"
-                                           }
-                                   }];
-}
-
-- (IBAction)sendPostForGameResult:(id)sender {
-    [_alt sendRequestForUserInfo:@{
-                                   @"url"        : @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080/v1/games/gameresult",
-                                   @"httpMethod" : @"post",
-                                   @"type"       : @"json",
-                                   @"param"  : @{
-                                           @"appid": @"asfdsfa",
-                                           @"openidid": @"1412523515",
-                                           @"openidtype": @"FACEBOOK"
-                                           }
-                                   }];
-}
-
 
 - (void)didReceiveMemoryWarning
 {

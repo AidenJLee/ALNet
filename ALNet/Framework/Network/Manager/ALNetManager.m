@@ -116,7 +116,9 @@ static ALNetManager *__instance = nil;
     
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [httpSession.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:QueueContext];
+    
+    // TODO : 오퍼레이션 큐 관찰하는 부분 추가해야 함
+//    [httpSession.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:QueueContext];
     
 }
 
@@ -152,21 +154,20 @@ static ALNetManager *__instance = nil;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    NSLog(@"keyPath : %@ " , keyPath);
+    
+    // TODO : 상단 네트워크 인디케이터 끄는 부분 추가해야함
     if([keyPath isEqualToString:OBSERVE_STATE]) {
         NSLog(@"checking for operation Count : %u", [(NSOperationQueue *)object operationCount]);
         if ([(NSOperationQueue *)object operationCount] <= 0) {
             // 상단 네트워크 인디케이터 끔
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            NSLog(@"operationQueue status change");
+//            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 //            // KVO 지움
 //            [(NSOperationQueue *)object removeObserver:self forKeyPath:@"operationCount" context:nil];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+    
 }
-
-
 
 @end

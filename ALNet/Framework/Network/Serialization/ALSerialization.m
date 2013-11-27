@@ -157,10 +157,20 @@
         [request setURL:URL];
         NSLog(@"URL Check : %@", [NSURL URLWithString:strEncodeParam relativeToURL:URL]);
         
-    } else if ([method isEqualToString:@"POST"] ||
-               [method isEqualToString:@"PUT"] ||
+    } else if ([method isEqualToString:@"POST"]) {
+        
+        [request setHTTPMethod:method];
+        [request setURL:URL];
+        
+        NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
+        [request setHTTPBody:dataParam];
+        
+    } else if ([method isEqualToString:@"PUT"] ||
                [method isEqualToString:@"DELETE"]) {
         
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPMethod:method];
         [request setURL:URL];
         

@@ -28,7 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.URLString = @"http://ec2-54-238-212-83.ap-northeast-1.compute.amazonaws.com:8080"; // Typing you URL
+    self.URLString = @"http://aiden.gonetis.com:8080"; // Typing you URL
 }
 
 - (IBAction)sendSimpleDataTask:(id)sender {
@@ -36,7 +36,7 @@
 }
 
 - (IBAction)sendDataTaskForGET:(id)sender {
-    [_alt sendRequestForUserInfo:@{ @"url": [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/standardinformation"] }];
+    [_alt sendRequestForUserInfo:@{ @"url": [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528507acf5d3160c3c000018"] }];
 }
 
 - (IBAction)sendDataTaskForPost:(id)sender {
@@ -49,15 +49,15 @@
 
 - (IBAction)sendDataTaskForPUT:(id)sender {
     [_alt sendRequestForUserInfo:@{
-                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528d25bf8055296c3a000001"],
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528507acf5d3160c3c000018"],
                                         @"httpMethod" : @"put",
-                                        @"param"  : @{ @"nickname": @"aidenjlee" }
+                                        @"param"  : @{ @"username": @"aidenjlee22" }
                                    }];
 }
 
 - (IBAction)sendDataTaskForDELETE:(id)sender {
     [_alt sendRequestForUserInfo:@{
-                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528d25bf8055296c3a000001"],
+                                        @"url"        : [NSString stringWithFormat:@"%@%@", self.URLString,  @"/v1/users/528507acf5d3160c3c000018"],
                                         @"httpMethod" : @"delete"
                                    }];
 }

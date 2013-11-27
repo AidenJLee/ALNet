@@ -17,21 +17,20 @@
 extern NSString * const ERROR_TITLE;
 extern NSString * const RESULT_TITLE;
 
-extern NSString * const ALTRANSACTION_NOTIFICATION_IDENTIFIER;
+extern NSString * const ALTRANSACTION_IDENTIFIER;
 
 
 #pragma mark -
 #pragma mark Session Configuration
 
+extern NSString * const OPERATIONQUEUE_NAME;
 extern NSString * const SESSION_DOWNLOAD_ID;
-extern NSString * const OPERATION_QUEUE_NAME;
-extern NSString * const OPERATION_QUEUE_STATUS;
 
 
 #pragma mark -
 #pragma mark Task Observing KeyPath
 
-extern NSString * const TASK_STATE_OBSERVING;
+extern NSString * const OBSERVE_STATE;
 
 
 #pragma mark -

@@ -20,8 +20,8 @@
     NSMutableArray *_observerKeys;  // 옵져버 이름들
     
     id _target;         // 콜백대상
-    SEL _successSel;    // 정상시 콜백
-    SEL _failureSel;    // 비정상시 콜백
+    SEL _successSeleltor;    // 정상시 콜백
+    SEL _failureSeleltor;    // 비정상시 콜백
 }
 
 - (void)didFinishReceive:(NSNotification *)noti; // Callback By ALNetManager

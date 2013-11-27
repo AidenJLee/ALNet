@@ -12,7 +12,6 @@
 @interface ALSerialization : NSObject
 
 @property (nonatomic, strong) NSIndexSet *statusCodes;
-@property (nonatomic, strong) NSSet *contentTypes;
 
 
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data;

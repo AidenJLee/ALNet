@@ -7,6 +7,8 @@
 //
 
 #import "ALNetManager.h"
+#import "ALHTTPSessionManager.h"
+#import "ALSessionConfiguration.h"
 #import "UIAsyncImageView.h"
 
 @implementation ALNetManager
@@ -50,7 +52,6 @@ static ALNetManager *__instance = nil;
     
     if (self) {
         _operationQueue = [self.class operationQueue];
-        [_operationQueue addObserver:self forKeyPath:OPERATION_QUEUE_STATUS options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
     }
     
     return self;
@@ -71,7 +72,7 @@ static ALNetManager *__instance = nil;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             _sharedQueue = [[NSOperationQueue alloc] init];
-            _sharedQueue.name = OPERATION_QUEUE_NAME;
+            _sharedQueue.name = OPERATIONQUEUE_NAME;
             _sharedQueue.maxConcurrentOperationCount = MAX_OPERATIONQUEUE_COUNT;
             
         });
@@ -98,23 +99,24 @@ static ALNetManager *__instance = nil;
         return;
     }
     
-    // ALHTTPSessionManager 생성
-    // SessionConfiguration은 ALConfiguration.h에서 조정
     
+    // Task에 따른 SessionConfiguration생성 - ALConfiguration.h에서 조정
     NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
     
     if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
         config = [ALSessionConfiguration backgroundConfiguration];
     }
     
+    // ALHTTPSessionManager 생성
     ALHTTPSessionManager *sessionManager = [[ALHTTPSessionManager alloc] initWithTarget:self
                                                                                selector:@selector(didFinishConnectionWithResult:)
                                                                           configuration:config];
     [sessionManager sendHTTPWithRequestInfo:requestInfo];
     
-    NSLog(@"ALHTTPSession Description : %@", [sessionManager description]);
+    
     // 상단 네트워크 인디케이터 켬
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [sessionManager.session.delegateQueue addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
     
 }
 
@@ -136,7 +138,7 @@ static ALNetManager *__instance = nil;
         [imageView setImageForReceivedURL:result[@"url"]];
         
     } else  {
-        [[NSNotificationCenter defaultCenter] postNotificationName:result[ALTRANSACTION_NOTIFICATION_IDENTIFIER]
+        [[NSNotificationCenter defaultCenter] postNotificationName:result[ALTRANSACTION_IDENTIFIER]
                                                             object:result
                                                           userInfo:nil];
     }
@@ -150,9 +152,9 @@ static ALNetManager *__instance = nil;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    
-    if([keyPath isEqualToString:OPERATION_QUEUE_STATUS]) {
-        NSLog(@"checking for operation Count : %lu", (unsigned long)[(NSOperationQueue *)object operationCount]);
+    NSLog(@"keyPath : %@ " , keyPath);
+    if([keyPath isEqualToString:OBSERVE_STATE]) {
+        NSLog(@"checking for operation Count : %u", [(NSOperationQueue *)object operationCount]);
         if ([(NSOperationQueue *)object operationCount] <= 0) {
             // 상단 네트워크 인디케이터 끔
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

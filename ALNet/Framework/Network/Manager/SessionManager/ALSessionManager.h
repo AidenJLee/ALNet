@@ -26,7 +26,7 @@
 @property (nonatomic, copy) NSURL *downloadedFileURL;
 @property (nonatomic, strong) NSMutableData *mutableData;
 
-// Add NSKeyValueObserving For Task Method Implement
+// NSKeyValueObserving For Task Method Implement
 - (void)addObserverForTask:(id)task;
 
 @end

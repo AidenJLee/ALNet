@@ -16,21 +16,20 @@
 NSString * const ERROR_TITLE  = @"Error";
 NSString * const RESULT_TITLE = @"Results";
 
-NSString * const ALTRANSACTION_NOTIFICATION_IDENTIFIER = @"TransactionNotificationIdentifier";
+NSString * const ALTRANSACTION_IDENTIFIER = @"TransactionIdentifier";
 
 
 #pragma mark -
 #pragma mark - Session Configuration
 
-NSString * const SESSION_DOWNLOAD_ID  = @"com.entist.ALNet.downloadSession";
-NSString * const OPERATION_QUEUE_NAME = @"com.entist.ALNet.operationQueue";
-NSString * const OPERATION_QUEUE_STATUS = @"DelegateQueueOperationCount";
+NSString * const OPERATIONQUEUE_NAME    = @"com.entist.ALNet.operationQueue";
+NSString * const SESSION_DOWNLOAD_ID    = @"com.entist.ALNet.downloadSession";
 
 
 #pragma mark -
 #pragma mark Task Observing KeyPath
 
-NSString * const TASK_STATE_OBSERVING = @"state";
+NSString * const OBSERVE_STATE = @"state";
 
 
 #pragma mark -
@@ -47,4 +46,4 @@ NSString * const TASK_DID_FINISH_NOTI  = @"TaskDidFinishNotification";
 #pragma mark -
 #pragma mark ALNetError Description
 
-NSString * const NETWORKING_ERROR_DOMAIN = @"NetworkingErrorDomain";
+NSString * const NETWORKING_ERROR_DOMAIN = @"NetworkinghasError";

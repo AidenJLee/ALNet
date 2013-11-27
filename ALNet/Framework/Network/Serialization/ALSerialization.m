@@ -15,12 +15,68 @@
     self = [super init];
     if (self) {
         self.statusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
-        self.contentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", @"text/javascript", nil];
     }
     
     return self;
 }
 
+// Check response - Status Code & MINE Type (@"application/json", @"text/json", @"text/plain")
+- (BOOL)validateResponse:(NSHTTPURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing *)error
+{
+    
+    NSDictionary *errorInfo = nil;
+    
+    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+    // 상태 코드가 정상 범위 내에 있고
+    if ([self.statusCodes containsIndex:(NSUInteger)res.statusCode]) {
+        
+        NSString *mineType = [res MIMEType];
+        if ([mineType isEqualToString:@"text/plain"] ||
+            [mineType isEqualToString:@"text/json"] ||
+            [mineType isEqualToString:@"application/json"]) {
+            
+            // MINE Type이 파싱 가능한 오브젝트면 YES
+            return YES;
+        
+        } else if ([mineType isEqualToString:@"text/html"]) {
+            
+            if (error) {
+                errorInfo = @{
+                              @"RequestFailed": @{
+                                      @"description": [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@",
+                                                       [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
+                                                       (long)res.statusCode,
+                                                       [response MIMEType]]
+                                      }
+                              };
+                
+                
+            }
+            
+        }
+        
+    } else {
+        
+        errorInfo = @{
+                      @"RequestFailed": @{
+                              @"description": [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@",
+                                               [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode],
+                                               (long)res.statusCode,
+                                               [response MIMEType]]
+                              }
+                      };
+        
+    }
+    
+    if (error) {
+        *error = [[NSError alloc] initWithDomain:NETWORKING_ERROR_DOMAIN
+                                            code:NSURLErrorBadServerResponse
+                                        userInfo:errorInfo];
+    }
+    
+    return NO;
+    
+}
 #pragma mark -
 #pragma makr - Object Serialization
 /*! NSURLResponse를 가지고 데이터 형태를 파악 후 object를 JSON형태의 데이터로 변환 해주는 메소드
@@ -31,31 +87,23 @@
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data
 {
     
-    NSMutableDictionary *errorInfo = nil;
-    
-    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-    if (![self.statusCodes containsIndex:(NSUInteger)res.statusCode] ||
-        ![self.contentTypes containsObject:[res MIMEType]]) {  // ex) statusCode: 200 / MIMEType: text/plain
+    NSError *error = nil;
+    NSDictionary *errorInfo = nil;
+    if ([self validateResponse:(NSHTTPURLResponse *)response data:data error:&error]) {
         
-        NSString *strDescription = [NSString stringWithFormat:@"Request failed: %@ (%ld) / %@", [NSHTTPURLResponse localizedStringForStatusCode:res.statusCode], (long)res.statusCode, [response MIMEType]];
+        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
         
-        errorInfo[@"error"][@"RequestFailed"] = @{ @"description": strDescription };
-        
-    }
-    
-    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    if ([data length] > 0) {
-        
-        NSError *error = nil;
-        // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
-        id resultObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        
-        if (!error) {
-            return resultObject;
-        } else {
-            errorInfo[@"error"][@"SerializationFailed"] = @{ @"error": error, @"description": [error description] };
+        if ([data length] > 0) {
+            NSError *serializationError = nil;
+            // NSJSONSerialization Option은 ALSerialization.rtf 파일 참고
+            id resultObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&serializationError];
+            
+            if (!serializationError) {
+                return resultObject;
+            } else {
+                errorInfo[ERROR_TITLE][@"SerializationFailed"] = @{ @"error": serializationError, @"description": [serializationError description] };
+            }
         }
         
     }
@@ -76,7 +124,6 @@
     }
     NSParameterAssert(method);
     NSParameterAssert(URL);
-    NSParameterAssert(parameters);
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     

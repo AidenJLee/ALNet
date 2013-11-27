@@ -14,9 +14,7 @@
 #import "ALSessionManager+DataTaskDelegate.h"
 #import "ALSessionManager+DownloadTaskDelegate.h"
 
-
 static void *ContextTaskState = &ContextTaskState;
-
 
 @interface ALSessionManager ()
 
@@ -92,6 +90,12 @@ static void *ContextTaskState = &ContextTaskState;
     
 }
 
+// NSKeyValueObserving For Task Method Implement
+- (void)addObserverForTask:(id)task
+{
+    [task addObserver:self forKeyPath:OBSERVE_STATE options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:ContextTaskState];
+}
+
 
 #pragma mark -
 #pragma mark - NSURLSessionDelegate
@@ -121,119 +125,6 @@ static void *ContextTaskState = &ContextTaskState;
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
     NSLog(@"Log : %s   Function : %s  Source Line : %d" , __FILE__, __FUNCTION__, __LINE__);
-}
-
-
-// Add NSKeyValueObserving For Task Method Implement
-- (void)addObserverForTask:(id)task
-{
-    [task addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:ContextTaskState];
-}
-
-
-#pragma mark -
-#pragma mark - NSKeyValueObserving
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context
-{
-    
-    // TODO: TaskDelegate에서 세부 구현이 필요합니다.  - Task NSKeyValueObserving으로 관찰중인 값 컨트롤
-    if (context == ContextTaskState && [keyPath isEqualToString:@"state"]) {
-        
-        NSString *notificationName = nil;
-        switch ([(NSURLSessionTask *)object state]) {
-                
-            case NSURLSessionTaskStateRunning:
-                notificationName = TASK_DID_START_NOTI;
-                break;
-                
-            case NSURLSessionTaskStateSuspended:
-                notificationName = TASK_DID_SUSPEND_NOTI;
-                break;
-                
-            case NSURLSessionTaskStateCompleted:
-                [object removeObserver:self forKeyPath:@"state" context:ContextTaskState];
-                break;
-                
-            default:
-                break;
-                
-        }
-        
-        if (notificationName) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:object];
-            });
-        }
-        
-    } else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-    
-}
-
-
-#pragma mark -
-#pragma mark - DataTask Method Implement
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request];
-    [self addObserverForTask:dataTask];
-    return dataTask;
-    
-}
-
-#pragma mark -
-#pragma makr - UploadTask Method Implement
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromFile:fileURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-    }];
-    [self addObserverForTask:uploadTask];
-    return uploadTask;
-    
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionUploadTask *uploadTask = [self.session uploadTaskWithRequest:request fromData:bodyData];
-    [self addObserverForTask:uploadTask];
-    return uploadTask;
-    
-}
-
-
-#pragma mark -
-#pragma makr - Download Task Method Implement
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                    completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithRequest:request];
-    [self addObserverForTask:downloadTask];
-    return downloadTask;
-    
-}
-
-- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData
-                                       completionHandler:(void (^)(NSURL *location, NSURLResponse *response, NSError *error))completionHandler
-{
-    
-    NSURLSessionDownloadTask *downloadTask = [self.session downloadTaskWithResumeData:resumeData];
-    [self addObserverForTask:downloadTask];
-    return downloadTask;
-    
 }
 
 

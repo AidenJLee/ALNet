@@ -19,15 +19,20 @@
     self = [super init];
     if (self) {
         
-        _target     = target;
-        _successSel = selSuccess;
-        _failureSel = selFailure;
+        _target          = target;
+        _successSeleltor = selSuccess;
+        _failureSeleltor = selFailure;
         
-        _observerKeys = [[NSMutableArray alloc] initWithCapacity:5];
+        _observerKeys    = [[NSMutableArray alloc] initWithCapacity:5];
         
     }
     return self;
     
+}
+
+- (id)initWithUserInfo:(id)userInfo completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
+{
+    return nil;
 }
 
 - (void)dealloc

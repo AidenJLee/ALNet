@@ -30,9 +30,9 @@ static Standardinformation *__instance = nil;
             
             if (infoObject) {
                 __instance.apis = infoObject[@"apis"] ? infoObject[@"apis"] : nil;
-                __instance.currentVersion   = infoObject[@"currentVersion"] ? infoObject[@"currentVersion"] : nil;
+                __instance.currentVersion   = infoObject[@"currentVersion"]   ? infoObject[@"currentVersion"] : nil;
                 __instance.lastForceVersion = infoObject[@"lastForceVersion"] ? infoObject[@"lastForceVersion"] : nil;
-                __instance.lastUpdateDate   = infoObject[@"lastUpdateDate"] ? infoObject[@"lastUpdateDate"] : nil;
+                __instance.lastUpdateDate   = infoObject[@"lastUpdateDate"]   ? infoObject[@"lastUpdateDate"] : nil;
             }
             
         });
@@ -73,15 +73,12 @@ static Standardinformation *__instance = nil;
 #pragma mark Public Method
 - (void)sendStandardInfomationRequest
 {
-    ALHTTPSessionManager *httpManager = [[ALHTTPSessionManager alloc] initWithTarget:self selector:@selector(recieveSuccess:) configuration:nil];
-    
-    [httpManager GET:@"http://aiden.gonetis.com:8080/v1/standardinformation" parameters:nil completionHandler:^(id responseObject) {
-        
-    }];
+
+    [_alt sendRequestForUserInfo:@{ @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation" }];
     
 //    [_alt sendRequestForUserInfo:@{
+//                                    @"url": @"http://aiden.gonetis.com:8080/v1/standardinformation",            // @required
 //                                    @"task" : @"upload",    // @optional - data(default), upload, download // if (task == upload) { @required  'bodyData' or 'fileURL' }
-//                                    @"url": @"",            // @required
 //                                    @"httpMethod": @"POST", // @optional - if (task == upload) { httpMethod = POST }
 //                                    @"type": @"JSON",       // @optional
 //                                    @"param" : @{},         // @optional

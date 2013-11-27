@@ -9,12 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "ALNetManagerProtocol.h"
 
-#import "ALHTTPSessionManager.h"
-#import "ALSessionConfiguration.h"
-
 @interface ALNetManager : NSObject <ALNetManagerProtocol>
 
-@property (atomic, strong) NSOperationQueue *operationQueue;
+@property (atomic, strong) NSOperationQueue *operationQueue; // ALSession에서 사용하는 OperationQueue
 
 + (ALNetManager *)sharedInstance;
 + (void)releaseSharedInstance;

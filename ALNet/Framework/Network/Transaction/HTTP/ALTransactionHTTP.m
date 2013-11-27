@@ -31,6 +31,8 @@
     
     NSURL *URL = [NSURL URLWithString:userInfo[@"url"]];
     if (!URL) {
+        NSDictionary *errorDic = @{ ERROR_TITLE:  @"URL error", @"description": @"URL Not found" };
+        [self returnObject:errorDic];
         return;
     }
     
@@ -52,12 +54,12 @@
     if (param || [param isKindOfClass:[NSDictionary class]]) {
         requestInfo[@"param"] = param;
     } else {
-        requestInfo[@"param"] = @{};    // @"Parameter가 없거나 NSDictionary가 아닙니다"
+        requestInfo[@"param"] = @{};    // @"Parameter가 없거나 Dictionary가 아닙니다"
     }
     if (customParam || [customParam isKindOfClass:[NSDictionary class]]) {
         requestInfo[@"customParam"] = customParam;
     } else {
-        requestInfo[@"customParam"] = @{};  // @"CustomParameter가 없거나 NSDictionary가 아닙니다"
+        requestInfo[@"customParam"] = @{};  // @"CustomParameter가 없거나 Dictionary가 아닙니다"
     }
     
     
@@ -74,6 +76,13 @@
             if (userInfo[@"fileURL"]) {
                 requestInfo[@"fileURL"] = userInfo[@"fileURL"];
             } else { // 둘다 없으면 안행~
+                NSDictionary *errorDic = @{
+                                            ERROR_TITLE: @{
+                                                            @"error": @"Upload Task error",
+                                                            @"description": @"bodyData or fileURL Not found"
+                                                        }
+                                            };
+                [self returnObject:errorDic];
                 return;
             }
         }
@@ -81,7 +90,7 @@
     }
     
     // 완료 된 오브젝트를 받을 노티피케이션 아이디 넣기
-    requestInfo[ALTRANSACTION_NOTIFICATION_IDENTIFIER] = _observerKeys.lastObject;
+    requestInfo[ALTRANSACTION_IDENTIFIER] = _observerKeys.lastObject;
     
 #ifdef DEBUG
     NSLog(@"----------------------");
@@ -107,15 +116,21 @@
 - (void)didFinishReceive:(NSNotification *)noti
 {
     
-    [self removeNotificationObserverForIdentifire:noti.object[ALTRANSACTION_NOTIFICATION_IDENTIFIER]];
+    [self removeNotificationObserverForIdentifire:noti.object[ALTRANSACTION_IDENTIFIER]];
+    [self returnObject:noti.object];
+    
+}
+
+- (void)returnObject:(id)object
+{
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     
-    if (noti.object[ERROR_TITLE]) {
-        [_target performSelector:_failureSel withObject:noti.object[ERROR_TITLE]];
+    if (object[ERROR_TITLE]) {
+        [_target performSelector:_failureSeleltor withObject:object[ERROR_TITLE]];
     } else {
-        [_target performSelector:_successSel withObject:noti.object[RESULT_TITLE]];
+        [_target performSelector:_successSeleltor withObject:object[RESULT_TITLE]];
     }
     
 #pragma clang diagnostic pop

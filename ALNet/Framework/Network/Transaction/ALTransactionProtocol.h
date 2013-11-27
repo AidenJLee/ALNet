@@ -14,17 +14,13 @@
  * \param target 요청에 대한 응답을 처리할 대상
  * \param sel 요청 성공시 해야 할 액션
  * \param failSel 요청 실패시 해야 할 액션
+ * \return ALTransaction Instance Object
  */
 - (id)initWithTarget:(id)target successSelector:(SEL)selSuccess failureSelector:(SEL)selFailure;
 
 /*! 원격지에 요청을 보낸다.
- * \param userInfo common, param, customParam(옵션)으로 이루어진 Dictionary
+ * \param userInfo common, param, customParam으로 이루어진 Dictionary
  */
 - (void)sendRequestForUserInfo:(id)userInfo;
-
-/*! 마지막으로 보낸 요청의 notification observer 이름
- *
- */
-- (NSString *)observerKey;
 
 @end

@@ -56,11 +56,6 @@
     } else {
         requestInfo[@"param"] = @{};    // @"Parameter가 없거나 Dictionary가 아닙니다"
     }
-    if (customParam || [customParam isKindOfClass:[NSDictionary class]]) {
-        requestInfo[@"customParam"] = customParam;
-    } else {
-        requestInfo[@"customParam"] = @{};  // @"CustomParameter가 없거나 Dictionary가 아닙니다"
-    }
     
     
     // 전송 방식이 Uplode일 때 fileURL이나 bodyData 값이 있어야 한다.
@@ -69,25 +64,36 @@
         requestInfo[@"httpMethod"] = @"multipart/form-data";
         
         // bodyData가 있냐?
-        if (userInfo[@"bodyData"]) {
-            requestInfo[@"bodyData"] = userInfo[@"bodyData"];
+        if ([param isEqual:@{}]) {
+            
         } else {
             // fileURL이 있냐?
             if (userInfo[@"fileURL"]) {
                 requestInfo[@"fileURL"] = userInfo[@"fileURL"];
             } else { // 둘다 없으면 안행~
                 NSDictionary *errorDic = @{
-                                            ERROR_TITLE: @{
-                                                            @"error": @"Upload Task error",
-                                                            @"description": @"bodyData or fileURL Not found"
-                                                        }
-                                            };
+                                           ERROR_TITLE: @{
+                                                   @"error": @"Upload Task error",
+                                                   @"description": @"bodyData or fileURL Not found"
+                                                   }
+                                           };
                 [self returnObject:errorDic];
                 return;
             }
         }
         
     }
+    
+    
+    
+    if (customParam || [customParam isKindOfClass:[NSDictionary class]]) {
+        requestInfo[@"customParam"] = customParam;
+    } else {
+        requestInfo[@"customParam"] = @{};  // @"CustomParameter가 없거나 Dictionary가 아닙니다"
+    }
+    
+    
+    
     
     // 완료 된 오브젝트를 받을 노티피케이션 아이디 넣기
     requestInfo[ALTRANSACTION_IDENTIFIER] = _observerKeys.lastObject;

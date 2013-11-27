@@ -38,7 +38,7 @@
     
     self.requestInfo = requestInfo;
     
-    NSMutableURLRequest *request = [self.serialization requestWithMethod:requestInfo[@"httpMethod"] URL:requestInfo[@"url"] parameters:requestInfo[@"param"]];
+    NSMutableURLRequest *request = [self.serialization requestWithURL:requestInfo[@"url"] httpMethod:requestInfo[@"httpMethod"] parameters:requestInfo[@"param"]];
     
     NSString *strTask = requestInfo[@"task"];
     if ([strTask isEqualToString:@"DATA"]) {

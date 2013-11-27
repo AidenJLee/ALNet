@@ -16,9 +16,9 @@
 
 - (id)objectForResponse:(NSURLResponse *)response data:(NSData *)data;
 
-- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
-                                       URL:(NSURL *)URL
-                                parameters:(NSDictionary *)parameters;
+- (NSMutableURLRequest *)requestWithURL:(NSURL *)URL
+                             httpMethod:(NSString *)method
+                             parameters:(NSDictionary *)parameters;
 
 #pragma mark -
 #pragma mark JSON Parsing Method

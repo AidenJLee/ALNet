@@ -10,8 +10,6 @@
 	<string>JSON, STRING, FILE, IMAGE</string>
 	<key>task</key>
 	<string>DATA, UPLOAD, DOWNLOAD</string>
-	<key>bodyData</key>
-	<data></data>
 	<key>fileURL</key>
 	<string></string>
 	<key>param</key>

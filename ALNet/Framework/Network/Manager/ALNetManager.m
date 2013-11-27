@@ -94,16 +94,23 @@ static ALNetManager *__instance = nil;
 {
     
     // Task에 따른 SessionConfiguration생성 - ALConfiguration.h에서 조정
-    NSURLSessionConfiguration *config = [ALSessionConfiguration defaultConfiguration];
+    NSURLSessionConfiguration *config = nil;
     
-    if ([requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
+    if ([requestInfo[@"task"] isEqualToString:@"DATA"]) {
+        
+        config = [ALSessionConfiguration defaultConfiguration];
+        
+    } else if ([requestInfo[@"task"] isEqualToString:@"UPLOAD"] ||
+               [requestInfo[@"task"] isEqualToString:@"DOWNLOAD"]) {
+        
         config = [ALSessionConfiguration backgroundConfiguration];
+        
     }
     
-    // ALHTTPSessionManager 생성
+    // ALHTTPSession 생성
     ALHTTPSession *httpSession = [[ALHTTPSession alloc] initWithTarget:self
-                                                                               selector:@selector(didFinishConnectionWithResult:)
-                                                                          configuration:config];
+                                                              selector:@selector(didFinishConnectionWithResult:)
+                                                         configuration:config];
     [httpSession sendHTTPWithRequestInfo:requestInfo];
     
     

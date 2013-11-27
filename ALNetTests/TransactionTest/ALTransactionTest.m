@@ -1,18 +1,18 @@
 //
-//  ALSessionManagerTest.m
+//  ALTransactionTest.m
 //  ALNet
 //
-//  Created by HoJun Lee on 2013. 11. 26..
+//  Created by HoJun Lee on 2013. 11. 28..
 //  Copyright (c) 2013년 HoJun Lee. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 
-@interface ALSessionManagerTest : XCTestCase
+@interface ALTransactionTest : XCTestCase
 
 @end
 
-@implementation ALSessionManagerTest
+@implementation ALTransactionTest
 
 - (void)setUp
 {

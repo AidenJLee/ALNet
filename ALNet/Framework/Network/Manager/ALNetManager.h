@@ -11,7 +11,8 @@
 
 @interface ALNetManager : NSObject <ALNetManagerProtocol>
 
-@property (atomic, strong) NSOperationQueue *operationQueue; // ALSession에서 사용하는 OperationQueue
+// ALSession에서 사용하는 OperationQueue
+@property (atomic, strong) NSOperationQueue *operationQueue;
 
 + (ALNetManager *)sharedInstance;
 + (void)releaseSharedInstance;

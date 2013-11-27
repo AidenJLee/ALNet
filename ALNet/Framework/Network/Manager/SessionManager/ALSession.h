@@ -16,7 +16,7 @@
     SEL _selector;
 }
 
-// ALSessionManager
+// ALSession
 @property (nonatomic, strong) id requestInfo;   // 송신, 수신에 대한 정보
 @property (nonatomic, strong, readonly) NSURLSession *session;
 

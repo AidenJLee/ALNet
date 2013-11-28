@@ -69,6 +69,14 @@ how to user other HTTPMethod?
 More info - /Framework/Network/UserInfo.plist 
 
 
+## Todo
+
++ Various Network supported in ALTransaction (HTTP, TCP/IP)
++ add Background Download
++ add Background Upload for Amazon S3
++ supported Progressive UI
+  
+
 ## Bugs / Feature Requests
 
 Think you’ve found a bug? 

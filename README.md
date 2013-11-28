@@ -9,7 +9,8 @@ This is a Network Framework for iOS URL Loading System.
 
 A simple example of sending Request.
 
-#### first. imort ALTransaction and declared instance
+#### FIRST,  
+imort ALTransaction and declared instance
 
 ###### ViewController.h file
 
@@ -20,7 +21,8 @@ A simple example of sending Request.
     }
 
 
-#### second. init instance and make a Seletors
+#### SECOND,  
+init instance and make a Seletors
 
 ###### Viewcontroller.m file
 
@@ -41,12 +43,14 @@ A simple example of sending Request.
     {
     }
 
-#### last. use ALTransaction with UserInfo
+#### LAST,  
+use ALTransaction with UserInfo
 
     - (IBAction)sendSomethingAction:(id)sender
     {
       [_alt sendRequestForUserInfo:@{ @"url": @"http://www.example.com/v1/something/URL" }];
     }
+
 
 #### that`s it!
 

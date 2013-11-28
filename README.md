@@ -84,22 +84,14 @@ Think you’ve found a bug?
 Please open a case in issue page.
 
 
-## Contributors
-
-..... nil 
-T_T
-
 ## Thanks to
 
+@SarahJoo  
 [@CHKMATE](https://github.com/CHKMATE)  
 [@Keigun](https://github.com/Keigun)  
 
-and
+[@dotNetTree](https://github.com/dotNetTree) (Mentor)  
 
-Mentor  
-[@dotNetTree](https://github.com/dotNetTree)  
-
-@SarahJoo
 
 
 ## License

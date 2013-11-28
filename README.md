@@ -1,9 +1,9 @@
 ALNet
 =====
-
 ## Introduction
 
 This is a Network Framework for iOS URL Loading System.
+
 
 ## Usage
 
@@ -77,7 +77,7 @@ Please open a case in issue page.
 ..... nil 
 T_T
 
-## tnahk to
+## Tnahk to
 
 [@CHKMATE](https://github.com/CHKMATE)  
 [@Keigun](https://github.com/Keigun)  
@@ -94,7 +94,7 @@ Read a Lincense file.
 
 
 
-### References
+## References
 [iOS URL Loading System](https://developer.apple.com/library/ios/DOCUMENTATION/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.pdf)  
 [What is REST? - from Wikipedia](http://en.wikipedia.org/wiki/Representational_state_transfer)  
 [What is Comet - from Wikipedia](http://en.wikipedia.org/wiki/Comet_%28programming%29)  

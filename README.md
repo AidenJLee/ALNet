@@ -72,10 +72,10 @@ More info - /Framework/Network/UserInfo.plist
 ## Todo
 
 + Various Network supported in ALTransaction (HTTP, TCP/IP)
-+ add Background Download
-+ add Background Upload for Amazon S3
-+ supported Progressive UI
-  
++ Progressive UI
++ Background Download
++ Background Upload for Amazon S3
+
 
 ## Bugs / Feature Requests
 

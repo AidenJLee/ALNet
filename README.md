@@ -104,8 +104,7 @@ Mentor
 
 ## License
 
-Read a Lincense file.
-
+GNU GPL V2 - Read a Lincense file.
 
 
 ## References

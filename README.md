@@ -77,7 +77,7 @@ Please open a case in issue page.
 ..... nil 
 T_T
 
-## Tnahk to
+## Thanks to
 
 [@CHKMATE](https://github.com/CHKMATE)  
 [@Keigun](https://github.com/Keigun)  
@@ -86,6 +86,8 @@ and
 
 Mentor
 [@dotNetTree](https://github.com/dotNetTree)  
+
+@SarahJoo
 
 
 ## License

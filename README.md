@@ -43,7 +43,7 @@ A simple example of sending Request.
 
 #### last. use ALTransaction with UserInfo
 
-    - (IBAction)sendDataTaskForGET:(id)sender
+    - (IBAction)sendSomethingAction:(id)sender
     {
       [_alt sendRequestForUserInfo:@{ @"url": @"http://www.example.com/v1/something/URL" }];
     }

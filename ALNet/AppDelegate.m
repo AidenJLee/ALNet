@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "ALCacheManager.h"
+#import "Standardinformation.h"
+
+NSString * const STANDARDINFORMATION_URL = @"";
 
 @implementation AppDelegate
 
@@ -26,29 +30,50 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [ALCacheManager releaseSharedInstance];
+    [Standardinformation releaseSharedInstance];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    // Cache파일이 30메가가 넘으면 삭제한다.
+    [[ALCacheManager sharedInstance] cleanStorageForLimit:30.0f * 1024.0f * 1024.0f];
+    
+    // 기준정보를 가져올 수 있는 URL을 설정해준다.
+    [Standardinformation sharedInstance].URLString = STANDARDINFORMATION_URL;
+    
+    if (![Standardinformation sharedInstance].lastUpdateDate) { // 어플 첫 기동 (관련 정보 init)
+        [[Standardinformation sharedInstance] standardInfomationInitialize:^(BOOL success, id result) {
+            
+        }];
+    } else {    // 어플 재실행
+        [[Standardinformation sharedInstance] standardInformationUpdate:^(BOOL success, id result) {
+            
+        }];
+    }
+    
+    // 마지막 업데이트로부터 얼마만큼의 시간이 지났는지 체크하여 동작 여부 ex) 30분
+    if ([[Standardinformation sharedInstance] isTimeChangesAfterAddingCertainNumber:(30)]) {
+        
+    }
+    
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
 }
 
 

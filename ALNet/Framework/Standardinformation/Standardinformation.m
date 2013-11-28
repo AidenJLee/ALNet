@@ -7,6 +7,7 @@
 //
 
 #import "Standardinformation.h"
+#import "ALStringConvertor.h"
 
 @implementation Standardinformation
 
@@ -73,7 +74,7 @@ static Standardinformation *__instance = nil;
 - (void)sendStandardInfomationRequest
 {
 
-    [_alt sendRequestForUserInfo:@{ @"url": @"" }];
+    [_alt sendRequestForUserInfo:@{ @"url": self.URLString }];
 
 }
 
@@ -93,6 +94,11 @@ static Standardinformation *__instance = nil;
 - (void)recieveSuccess:(id)result
 {
     
+    id apiResult = result[@"apis"];
+    if (apiResult) {
+        self.apis = apiResult;
+        NSLog(@" Convert APIS : %@", self.apis);
+    }
     if ([result[@"customParam"][@"method"] isEqualToString:@"init"]) {
         
         if (_initReceiveComplateBlock) {
@@ -140,6 +146,35 @@ static Standardinformation *__instance = nil;
     
 }
 
+
+- (BOOL)isTimeChangesAfterAddingCertainNumber:(NSInteger)minute
+{
+    
+    BOOL isNeedRequest = NO;
+    
+    if (!self.lastUpdateDate) {
+        return YES;
+    }
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSDate *dateLastUpdate = [dateFormatter dateFromString:self.lastUpdateDate];
+    NSDate *dateToday      = [NSDate date];
+    
+    NSDateComponents *dateConversion = [[NSCalendar currentCalendar] components:NSMinuteCalendarUnit
+                                                                       fromDate:dateLastUpdate
+                                                                         toDate:dateToday
+                                                                        options:0];
+    
+    if ([dateConversion minute] > minute) {
+        isNeedRequest = YES;
+    }
+    
+    return isNeedRequest;
+    
+}
 
 
 @end

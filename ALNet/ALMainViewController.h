@@ -14,7 +14,6 @@
     ALTransaction *_alt;
 }
 
-@property (strong, nonatomic) NSString *URLString;
 @property (strong, nonatomic) IBOutlet UITextView *textView;
 
 @end

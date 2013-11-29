@@ -13,8 +13,8 @@
 #pragma mark Value Result Naming
 
 
-NSString * const ERROR_TITLE  = @"Error";
-NSString * const RESULT_TITLE = @"Results";
+NSString * const ERROR_TITLE  = @"error";
+NSString * const RESULT_TITLE = @"result";
 
 NSString * const ALTRANSACTION_IDENTIFIER = @"TransactionIdentifier";
 

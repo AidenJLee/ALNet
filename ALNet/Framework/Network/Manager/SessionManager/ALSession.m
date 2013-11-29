@@ -114,12 +114,14 @@ static void *ContextTaskState = &ContextTaskState;
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (appDelegate.backgroundSessionCompletionHandler) {
-        void (^completionHandler)() = appDelegate.backgroundSessionCompletionHandler;
-        appDelegate.backgroundSessionCompletionHandler = nil;
-        completionHandler();
-    }
+    NSLog(@"Function : %s  Source Line : %d" , __FUNCTION__, __LINE__);
+    
+//    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    if (appDelegate.backgroundSessionCompletionHandler) {
+//        void (^completionHandler)() = appDelegate.backgroundSessionCompletionHandler;
+//        appDelegate.backgroundSessionCompletionHandler = nil;
+//        completionHandler();
+//    }
     
 }
 

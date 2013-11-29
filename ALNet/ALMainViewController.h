@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ALTransaction.h"
+#import "UIAsyncImageView.h"
 
 @interface ALMainViewController : UIViewController
 {
@@ -15,5 +16,6 @@
 }
 
 @property (strong, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UIAsyncImageView *AsyncImageView;
 
 @end

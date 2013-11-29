@@ -76,13 +76,4 @@ NSString * const STANDARDINFORMATION_URL = @"";
     
 }
 
-
-#pragma mark -
-#pragma mark Background SessionTask Method Implement
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier
-  completionHandler:(void (^)())completionHandler
-{
-    self.backgroundSessionCompletionHandler = completionHandler;
-}
-
 @end

@@ -152,7 +152,6 @@
         NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [request setURL:[NSURL URLWithString:strEncodeParam relativeToURL:URL]];
         [request setHTTPMethod:method];
-        [request setURL:URL];
         NSLog(@"URL Check : %@", [NSURL URLWithString:strEncodeParam relativeToURL:URL]);
         
     } else if ([method isEqualToString:@"POST"]) {

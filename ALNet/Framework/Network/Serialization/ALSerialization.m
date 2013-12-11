@@ -154,16 +154,8 @@
         [request setHTTPMethod:method];
         NSLog(@"URL Check : %@", [NSURL URLWithString:strEncodeParam relativeToURL:URL]);
         
-    } else if ([method isEqualToString:@"POST"]) {
-        
-        [request setURL:URL];
-        [request setHTTPMethod:method];
-        
-        NSString *strEncodeParam = [strParam stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSData *dataParam = [strEncodeParam dataUsingEncoding:NSUTF8StringEncoding];
-        [request setHTTPBody:dataParam];
-        
-    } else if ([method isEqualToString:@"PUT"] ||
+    } else if ([method isEqualToString:@"POST"] ||
+               [method isEqualToString:@"PUT"] ||
                [method isEqualToString:@"DELETE"]) {
         
         [request setURL:URL];

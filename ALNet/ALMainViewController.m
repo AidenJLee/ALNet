@@ -30,23 +30,21 @@
 {
     [super viewDidLoad];
     
-    [_AsyncImageView setImageForOriginalURLString:[NSURL URLWithString:@"http://cfile6.uf.tistory.com/image/137DC1484FC63A6B287B30"]
-                                     thumbnailURL:[NSURL URLWithString:@"http://cfile22.uf.tistory.com/image/1755B30F4B41C93944903B"]];
 }
 
 - (IBAction)sendSimpleDataTask:(id)sender {
-    [_alt sendRequestForUserInfo:@{ @"url": [Standardinformation sharedInstance].apis[@"users"] }];
+    [_alt sendRequestForUserInfo:@{ @"url": @"" }];
 }
 
 - (IBAction)sendDataTaskForGET:(id)sender {
-    [_alt sendRequestForUserInfo:@{ @"url": [Standardinformation sharedInstance].apis[@"users"] }];
+    [_alt sendRequestForUserInfo:@{ @"url": @"" }];
 }
 
 - (IBAction)sendDataTaskForPost:(id)sender {
     [_alt sendRequestForUserInfo:@{
                                         @"url"        : @"",
                                         @"httpMethod" : @"post",
-                                        @"param"      : @{ @"_id": @"528d25bf8055296c3a000001" }
+                                        @"param"      : @{ @"_id": @"your id" }
                                    }];
 }
 

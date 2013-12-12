@@ -23,6 +23,7 @@
 #pragma mark -
 #pragma mark Public Method
 
+// TODO : NSString 버전도 추가 - 커링 형식으로
 - (void)setImageForURL:(NSURL *)URL;
 - (void)setImageForOriginalURLString:(NSURL *)originalURL thumbnailURL:(NSURL *)thumbnailURL;
 

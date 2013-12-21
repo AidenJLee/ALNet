@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0F0134CC18433BBB005E11A0 /* Standardinformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0134CB18433BBB005E11A0 /* Standardinformation.m */; };
 		0F1C3D2F183F4D1A004AC9BD /* ALSessionConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */; };
-		0F1C3D3E183F96B9004AC9BD /* ALStringConvertor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C3D3D183F96B9004AC9BD /* ALStringConvertor.m */; };
 		0F47654F1848B5E4005FCE06 /* ALDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F47654E1848B5E4005FCE06 /* ALDocumentManager.m */; };
 		0F642321183F329000BB5510 /* ALNetConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6422F7183F329000BB5510 /* ALNetConst.m */; };
 		0F642322183F329000BB5510 /* ALNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6422FA183F329000BB5510 /* ALNetManager.m */; };
@@ -56,8 +55,6 @@
 		0F0134CB18433BBB005E11A0 /* Standardinformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Standardinformation.m; sourceTree = "<group>"; };
 		0F1C3D2D183F4D1A004AC9BD /* ALSessionConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALSessionConfiguration.h; sourceTree = "<group>"; };
 		0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALSessionConfiguration.m; sourceTree = "<group>"; };
-		0F1C3D3C183F96B9004AC9BD /* ALStringConvertor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALStringConvertor.h; sourceTree = "<group>"; };
-		0F1C3D3D183F96B9004AC9BD /* ALStringConvertor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALStringConvertor.m; sourceTree = "<group>"; };
 		0F47654D1848B5E4005FCE06 /* ALDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALDocumentManager.h; sourceTree = "<group>"; };
 		0F47654E1848B5E4005FCE06 /* ALDocumentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALDocumentManager.m; sourceTree = "<group>"; };
 		0F6422F6183F329000BB5510 /* ALNetConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALNetConst.h; sourceTree = "<group>"; };
@@ -146,15 +143,6 @@
 				0F1C3D2E183F4D1A004AC9BD /* ALSessionConfiguration.m */,
 			);
 			path = Configuration;
-			sourceTree = "<group>";
-		};
-		0F1C3D3B183F96AD004AC9BD /* ALStringConvertor */ = {
-			isa = PBXGroup;
-			children = (
-				0F1C3D3C183F96B9004AC9BD /* ALStringConvertor.h */,
-				0F1C3D3D183F96B9004AC9BD /* ALStringConvertor.m */,
-			);
-			path = ALStringConvertor;
 			sourceTree = "<group>";
 		};
 		0F47654C1848B5D3005FCE06 /* ALDocumentManager */ = {
@@ -356,7 +344,6 @@
 			children = (
 				0FE474D3183CA91D00DD1FDC /* ALCacheManager */,
 				0F47654C1848B5D3005FCE06 /* ALDocumentManager */,
-				0F1C3D3B183F96AD004AC9BD /* ALStringConvertor */,
 			);
 			path = Convenience;
 			sourceTree = "<group>";
@@ -494,7 +481,6 @@
 				0FC3C89718463EFF001F42CF /* ALSession.m in Sources */,
 				0FD88C8B1839EE7D0001A051 /* AppDelegate.m in Sources */,
 				0FD88C871839EE7D0001A051 /* main.m in Sources */,
-				0F1C3D3E183F96B9004AC9BD /* ALStringConvertor.m in Sources */,
 				0FE4750F183CA91D00DD1FDC /* UIAsyncImageView.m in Sources */,
 				0FC3C89E1846416C001F42CF /* ALHTTPSession.m in Sources */,
 				0F64232B183F329000BB5510 /* ALTransaction.m in Sources */,

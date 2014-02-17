@@ -71,6 +71,7 @@ More info - /Framework/Network/UserInfo.plist
 
 ## Todo
 
++ ResponseSerialization Bug fix (may be...CR, LF Peoblem.)
 + Various Network supported in ALTransaction (HTTP, TCP/IP)
 + Progressive UI
 + Background Download

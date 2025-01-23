@@ -1,108 +1,102 @@
-ALNet
-=====
+# ALNet
+
 ## Introduction
-
-This is a Network Framework for iOS URL Loading System.
-
+ALNet is a network framework designed for the iOS URL Loading System.
 
 ## Usage
+Here's a simple example of sending a request.
 
-A simple example of sending Request.
+### FIRST,
+Import `ALTransaction` and declare an instance.
 
-#### FIRST,  
-imort ALTransaction and declared instance
+**ViewController.h**
 
-###### ViewController.h file
+```objc
+#import "ALTransaction.h"
 
-    #import "ALTransaction.h"
-    @interface SomethingViewController : UIViewController
-    {
-      ALTransaction *_alt;
-    }
+@interface SomethingViewController : UIViewController
+{
+  ALTransaction *_alt;
+}
+```
 
+### SECOND,
+Initialize the instance and define the selectors.
 
-#### SECOND,  
-init instance and make a Seletors
+**ViewController.m**
 
-###### Viewcontroller.m file
+```objc
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+  self = [super initWithCoder:aDecoder];
+  if (self) {
+      _alt = [[ALTransaction alloc] initWithTarget:self
+                                   successSelector:@selector(recieveSuccess:)
+                                   failureSelector:@selector(recieveFailure:)];
+  }
+  return self;
+}
 
-    - (id)initWithCoder:(NSCoder *)aDecoder
-    {
-      self = [super initWithCoder:aDecoder];
-      if (self) {
-          _alt = [[ALTransaction alloc] initWithTarget:self
-                                       successSelector:@selector(recieveSuccess:)
-                                       failureSelector:@selector(recieveFailure:)];
-      }
-      return self;
-    }
-    - (void)recieveSuccess:(id)result
-    {
-    }
-    - (void)recieveFailure:(id)result
-    {
-    }
+- (void)recieveSuccess:(id)result
+{
+}
 
-#### LAST,  
-use ALTransaction with UserInfo
+- (void)recieveFailure:(id)result
+{
+}
+```
 
-    - (IBAction)sendSomethingAction:(id)sender
-    {
-      [_alt sendRequestForUserInfo:@{ @"url": @"http://www.example.com/v1/something/URL" }];
-    }
+### LAST,
+Use `ALTransaction` with user information.
 
+```objc
+- (IBAction)sendSomethingAction:(id)sender
+{
+  [_alt sendRequestForUserInfo:@{ @"url": @"http://www.example.com/v1/something/URL" }];
+}
+```
 
-#### that`s it!
+That's it!
 
+## Detailed Info
 
+### How to use other HTTP methods?
 
-## Detail Info
+To use other HTTP methods, pass the desired method as part of the `userInfo` dictionary.
 
-how to user other HTTPMethod?
+```objc
+[_alt sendRequestForUserInfo:@{
+                                    @"url"        : @"http://www.example.com/v1/something/URL",
+                                    @"httpMethod" : @"POST",
+                                    @"param"      : @{ @"_id": @"528d25bf8055296c3a000001" }
+                                 }];
+```
 
-    [_alt sendRequestForUserInfo:@{
-                                        @"url"        : @"http://www.example.com/v1/something/URL",
-                                        @"httpMethod" : @"post",
-                                        @"param"      : @{ @"_id": @"528d25bf8055296c3a000001" }
-                                     }];
-
-More info - /Framework/Network/UserInfo.plist 
-
+For more information, see `/Framework/Network/UserInfo.plist`.
 
 ## Todo
 
-+ ResponseSerialization Bug fix (may be...CR, LF Peoblem.)
-+ Various Network supported in ALTransaction (HTTP, TCP/IP)
-+ Progressive UI
-+ Background Download
-+ Background Upload for Amazon S3
-
+- Fix ResponseSerialization bug (potential CR, LF issue).
+- Support for various network protocols in ALTransaction (HTTP, TCP/IP).
+- Implement Progressive UI.
+- Background download and upload (for Amazon S3).
 
 ## Bugs / Feature Requests
-
-Think you’ve found a bug? 
-
-Please open a case in issue page.
-
+If you think you've found a bug, please open an issue on the GitHub issues page.
 
 ## Thanks to
-
-@SarahJoo  
-[@CHKMATE](https://github.com/CHKMATE)  
-[@Keigun](https://github.com/Keigun)  
-
-[@dotNetTree](https://github.com/dotNetTree) (Mentor)  
-
-
+- @SarahJoo
+- @CHKMATE
+- @Keigun
+- @dotNetTree (Mentor)
 
 ## License
-
-GNU GPL V2 - Read a Lincense file.
-
+This project is licensed under the GNU GPL v2. See the LICENSE file for details.
 
 ## References
-[iOS URL Loading System](https://developer.apple.com/library/ios/DOCUMENTATION/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.pdf)  
-[What is REST? - from Wikipedia](http://en.wikipedia.org/wiki/Representational_state_transfer)  
-[What is Comet - from Wikipedia](http://en.wikipedia.org/wiki/Comet_%28programming%29)  
-[RFC 2616 - Hypertext Transfer Protocol — HTTP/1.1](http://tools.ietf.org/html/rfc2616)  
+- [iOS URL Loading System](https://developer.apple.com/documentation/foundation/url_loading_system)
+- [What is REST?](https://en.wikipedia.org/wiki/Representational_state_transfer) - Wikipedia
+- [What is Comet?](https://en.wikipedia.org/wiki/Comet_(programming)) - Wikipedia
+- [RFC 2616 - Hypertext Transfer Protocol — HTTP/1.1](https://tools.ietf.org/html/rfc2616)
 
+  
